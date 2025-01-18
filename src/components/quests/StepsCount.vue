@@ -8,7 +8,7 @@
 <button @click="test()" class="uppercase bg-red-900 p-3 ">test</button>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const steps = ref(0)
 
