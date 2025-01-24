@@ -1,5 +1,5 @@
 <template>
-  <DailyQuests @levelUp="upgradeLevel(player)" />
+  <DailyQuests @levelUp="upgradeLevel(player)"/>
   <div class="flex justify-center items-center flex-col text-blue-300 relative">
 <!--      <Popover>
       <PopoverButton class="flex justify-center ">
@@ -46,13 +46,10 @@ const sss = () => {
 //  localStorage.getItem(playerLevel)
 }
 
-
 const isFirstRun = ref(false);
 
-
-
 onMounted(() => {
-  player.value = store.player.level
+  player.value = store.player
   if (!localStorage.getItem('hasVisited')) {
     isFirstRun.value = true;
     localStorage.setItem('hasVisited', 'true');

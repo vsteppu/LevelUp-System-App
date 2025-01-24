@@ -1,8 +1,8 @@
 <template>
-<main class="flex justify-center items-center flex-col text-blue-300 relative">
-    <div class="h-16 w-[400px] flex align-middle justify-between items-center">
+<main class="flex md:justify-center items-center flex-col text-blue-300 relative">
+    <div class="h-16 md:w-[400px] w-full px-4 flex align-middle justify-between items-center">
       <div class=" h-12 w-12 flex items-center justify-center text-2xl text-blue-300 text-center border-[1px] rounded-sm border-blue-300 "><p class="pi pi-info-circle "></p></div>
-      <h1 class="uppercase text-4xl h-12 flex-grow text-shadow-blue flex items-center justify-center pb-1  border-[1px] rounded-sm border-blue-300">
+      <h1 class="uppercase text-4xl h-12 flex-grow text-shadow-blue flex items-center justify-center pb-1 border-[1px] rounded-sm border-blue-300">
         Daily Quest
       </h1>
     </div>
@@ -20,31 +20,30 @@
       </transition>
     </teleport>
 <!--     <div class="uppercase text-3xl h-40 flex-grow text-shadow-blue flex items-center justify-center pb-1  border-[1px] rounded-sm border-blue-300">Level Up!</div> -->
-    <div class="mt-5">
+    <div class="mt-5 md:w-[350px] w-full md:px-2 px-4 ">
       <hr class=" border-blue-300 mb-3 " />
-      <label for="pushups" class="flex w-[350px]  justify-between">
+      <label for="pushups" class="flex justify-between">
         <h2>100 Pushups</h2>
         <div class="flex justify-center items-center h-5 w-5 border-[1px] rounded-sm border-blue-300">
           <input type="checkbox" id="pushups" value="pushup" v-model="checkedExercise" class="peer appearance-none" />
           <span class="pi pi-check text-green-400 text-shadow-green opacity-0 peer-checked:opacity-100 text-2xl "></span>
         </div>
       </label>
-
-      <label for="situps" class="flex w-[350px]  justify-between">
+      <label for="situps" class="flex justify-between">
         <h2>100 Sit-ups</h2>
         <div class="flex justify-center items-center h-5 w-5 border-[1px] rounded-sm border-blue-300">
           <input type="checkbox" id="situps" value="situps" v-model="checkedExercise" class="peer appearance-none" />
           <span class="pi pi-check text-green-400 text-shadow-green opacity-0 peer-checked:opacity-100 text-2xl "></span>
         </div>
       </label>
-      <label for="squats" class="flex w-[350px]  justify-between">
+      <label for="squats" class="flex justify-between">
         <h2>100 Squats</h2>
         <div class="flex justify-center items-center h-5 w-5 border-[1px] rounded-sm border-blue-300">
           <input type="checkbox" id="squats" value="squats" v-model="checkedExercise" class="peer appearance-none" />
           <span class="pi pi-check text-green-400 text-shadow-green opacity-0 peer-checked:opacity-100 text-2xl "></span>
         </div>
       </label>
-      <label for="running" class="flex w-[350px]  justify-between">
+      <label for="running" class="flex justify-between">
         <h2>10km Running</h2>
         <div class="flex justify-center items-center h-5 w-5 border-[1px] rounded-sm border-blue-300">
           <input type="checkbox" id="running" value="running" v-model="checkedExercise" class="peer appearance-none" />

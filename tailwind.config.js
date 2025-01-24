@@ -7,6 +7,7 @@ export default {
   theme: {
     fontFamily: {
       sans: ['Montserrat', 'sans'], // Add your font family here
+      goldman: ['Goldman'], // Add your font family here
     },
     extend: {
       textShadow: {
@@ -19,8 +20,9 @@ export default {
           DEFAULT: '#fffff', // Text negru implicit
         },
       },
-
-
+      backgroundImage: {
+        'player-bg': 'linear-gradient(45deg, rgb(249, 210, 210), rgb(197, 247, 180), rgb(244, 172, 90), rgb(52, 7, 54))',
+      },
     },
   },
   plugins: [
@@ -39,4 +41,3 @@ export default {
     },
   ],
 }
-

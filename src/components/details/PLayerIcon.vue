@@ -10,7 +10,7 @@
 import { usePlayerStore } from '@/stores/playerStore'
 
 const store = usePlayerStore()
-const level = store.player.level
+const level = store.player
 
 
 </script>

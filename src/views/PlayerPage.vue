@@ -49,8 +49,8 @@ const store = usePlayerStore()
 const router = useRouter()
 const props = defineProps(['submit']);
 
-const playerName = ref(store.player.displayName)
-const playerLevel = ref(store.player.level)
+const playerName = ref(store.player)
+const playerLevel = ref(store.player)
 const playerRank = ref('unknown')
 const playerSpeciality = ref('unknown')
 
