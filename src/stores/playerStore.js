@@ -1,38 +1,38 @@
-/* eslint-disable no-unused-vars */
-import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { ref, watch } from 'vue'
+import { supabase } from '../supabase.js'
+import router from '@/router/index.js'
+import { useAuthStore } from './authStore.js'
+
 
 export const usePlayerStore = defineStore('store', () => {
-  const player = ref(JSON.parse(localStorage.getItem("user")) ?? null)
-  const upgradedLevel = ref(0)
+  const authStore = useAuthStore()
 
-
-  const levelUp = (playerLevel) =>{
-    playerLevel++
-    player.value.level = playerLevel
-    localStorage.setItem('user',JSON.stringify(player.value))
-    return playerLevel
+  const levelUp = async() => {
+    const user = await authStore.getUser()
+    if(user.user_metadata.level === undefined || user.user_metadata.level === null){
+      const { data } = await supabase.auth.updateUser({
+        data: { level: 1 }
+      })
+    }
+    let level = user.user_metadata.level
+    level++
+    const { data } = await supabase.auth.updateUser({
+      data: { level: level }
+    })
+    console.log(level)
   }
 
-  /* const levelUp = (playerLevel) =>{
-    playerLevel++
-    return playerLevel
+  const completeDailyQuest = async() => {
+    const { data } = await supabase.auth.updateUser({
+      data: { daily_quests: true }
+    })
   }
- */
-
-
-  const setUpgradedLevel = (newValue) =>{
-    player.value.level = newValue
-    console.log(player.value.level)
-    localStorage.setItem('user',JSON.stringify(player.value))
-    return
-  }
-  const displaydata = () => {
-    const storredLevelinplayer = JSON.parse(localStorage.getItem("user"))
-    console.log(storredLevelinplayer)
-    console.log(storredLevelinplayer.level)
+  const resetDailyQuest = async() => {
+    const { data } = await supabase.auth.updateUser({
+      data: { daily_quests: false }
+    })
   }
 
-
-  return {player, levelUp, upgradedLevel, setUpgradedLevel, displaydata}
+  return {levelUp, completeDailyQuest, resetDailyQuest}
 })
