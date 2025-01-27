@@ -1,32 +1,32 @@
 <template>
   <!-- <PlayerInfo/>-->
-  <main class="flex md:justify-center items-center flex-col relative">
+  <main class="flex md:justify-center md:items-center flex-col relative">
     <div
-      class="flex md:justify-between justify-between mt-2 md:w-[350px]  md:px-2 px-8 text-2xl md:text-xl uppercase">
+      class="flex md:justify-between justify-between mt-2 md:w-[350px]  md:px-2 px-6 text-xl md:text-xl uppercase">
       <p class="font-light">Player</p>
       <div class="font-bold">
         {{ playerName }}
       </div>
     </div>
-    <div v-if="setName" class="font-thin flex justify-between md:w-[350px]">
+    <div v-if="playerName === undefined" class="font-thin flex md:px-0 px-6 justify-between md:w-[350px]">
       <input v-model="playerName" @keyup.enter="setUserValues(playerName)" placeholder="type your name" class="my-2 flex flex-grow mr-3 w-44 bg-slate-800 px-4 py-1">
       <button @click="setUserValues(playerName)">Change</button>
     </div>
     <div
-      class="flex md:justify-between justify-between mt-2 md:w-[350px]  md:px-2 px-8 text-2xl md:text-xl font-bold uppercase">
+      class="flex md:justify-between justify-between mt-2 md:w-[350px]  md:px-2 px-6 text-xl md:text-xl font-bold uppercase">
       <p class="font-light">Player level</p>
       <div class="font-bold">
         {{ playerLevel }}
       </div>
     </div>
     <div
-      class="flex md:justify-between justify-between mt-2 md:w-[350px]  md:px-2 px-8 text-2xl md:text-xl font-bold uppercase">
+      class="flex md:justify-between justify-between mt-2 md:w-[350px]  md:px-2 px-6 text-xl md:text-xl font-bold uppercase">
       <p class="font-light">Daily Quests</p>
       <div class="font-bold">
         {{ dailyQuest }}
       </div>
     </div>
-    <section class="my-6">
+    <section class="my-6 md:pl-0 mx-auto">
       <button @click="logOut()" class="uppercase p-4 bg-slate-800">logout</button>
     </section>
   </main>
