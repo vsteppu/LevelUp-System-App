@@ -16,9 +16,6 @@ export default {
         'neon-green': '0 0 2px rgba(74, 222, 128, 0.8), 0 0 4px rgba(74, 222, 128, 0.7), 0 0 6px rgba(74, 222, 128, 0.6), 0 0 8px rgba(74, 222, 128, 0.5)',
       },
       colors: {
-        'gunmetal': '#2b323bff',
-        'oxford' : '#111d2eff',
-        'oxford-light' : '#5F6E82',
         text: {
           DEFAULT: '#fffff', // Text negru implicit
         },
