@@ -7,7 +7,9 @@ export default {
   theme: {
     fontFamily: {
       sans: ['Montserrat', 'sans'], // Add your font family here
+      Roboto: ['Roboto'], // Add your font family here
       goldman: ['Goldman'], // Add your font family here
+      quicksand: ['Quicksand'], // Add your font family here
     },
     extend: {
       textShadow: {

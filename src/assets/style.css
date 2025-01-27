@@ -4,5 +4,5 @@
 
 
 html, body {
-  @apply bg-slate-900 text-blue-300;
+  @apply bg-neutral-800 text-neutral-300;
 }

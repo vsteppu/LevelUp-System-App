@@ -2,28 +2,28 @@
   <main class="flex md:justify-center items-center flex-col relative">
     <div class="h-16 md:w-[400px] w-full px-4 flex align-middle justify-between items-center">
       <div
-        class=" h-12 w-12 flex items-center justify-center text-2xl text-center border-[1px] border-blue-300 rounded-sm ">
+        class=" h-12 w-12 flex items-center justify-center text-2xl text-center bg-neutral-900 rounded-sm ">
         <p class="pi pi-info-circle "></p>
       </div>
       <h1
-        class="uppercase text-4xl h-12 flex-grow text-shadow-blue flex items-center justify-center pb-1 border-[1px] border-blue-300 rounded-sm">
+        class="uppercase text-3xl h-12 flex-grow flex items-center justify-center pb-1 border-[2px] border-neutral-900 rounded-sm">
         Daily Quest
       </h1>
     </div>
     <teleport to="body">
       <transition name="slide-in" mode="out-in">
         <div v-if="levelUpNotification"
-          class="flex items-center justify-center fixed top-1/3 left-1/2 w-[500px] h-[250px] bg-slate-900  border-[1px] rounded-sm  transform -translate-x-1/2 -translate-y-1/3">
+          class="flex items-center justify-center fixed top-1/3 left-1/2 w-[500px] h-[250px]  border-[1px] rounded-sm  transform -translate-x-1/2 -translate-y-1/3">
           <p class="uppercase text-4xl pb-4">{{ popupMessage }}</p>
         </div>
       </transition>
     </teleport>
-    <div class="mt-5 md:w-[350px] w-full md:px-2 px-9 text-2xl md:text-lg font-light ">
+    <div class="mt-5 md:w-[350px] w-full md:px-2 px-9 text-xl md:text-lg font-light ">
       <form v-for="item in dailyExercise" :key="item.id" @click="addExecise(item)" class="flex justify-between">
         {{ item.value }}
         <div class="flex items-center">
           [ {{ item.quantity }} {{ item.units }} ]
-          <p class="flex justify-center items-center h-5 w-5 border-[1px] border-blue-300 rounded-sm ml-3">
+          <p class="flex justify-center items-center h-5 w-5 border-[1px] border-neutral-300 rounded-sm ml-3">
             <span v-if="checkedExercise.includes(item.value) || dailyQuestCompleted"
               class="pi pi-check text-green-400 text-shadow-green text-2xl"></span>
           </p>
@@ -43,7 +43,7 @@
   </main>
   <section class="flex md:justify-center md:items-center flex-col relative">
     <div
-      class="flex md:justify-between justify-between mt-2 md:w-[350px]  md:px-2 px-8 text-2xl md:text-xl font-bold uppercase">
+      class="flex md:justify-between justify-between mt-2 md:w-[350px]  md:px-2 px-8 text-xl md:text-xl font-bold uppercase">
       Player
       <div class="flex items-center">
         {{ playerName }}
