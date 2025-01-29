@@ -1,5 +1,13 @@
 <template>
-  <DailyQuests @levelUp="upgradeLevel(player)"/>
+  <div
+    v-if="loading"
+    class="bg-neutral-950 w-full top-16 bottom-0 absolute z-10 flex justify-center items-center "
+  >
+    <p class="pi pi-spin pi-spinner text-7xl text-neutral-500 absolute"></p>
+  </div>
+  <div class="md:w-[800px] p-10 h-[calc(100vh-64px)] items-center mx-auto bg-gradient-to-tl from-[#222222] to-neutral-900">
+    <DailyQuests @levelUp="upgradeLevel(player)"/>
+  </div>
   <div class="flex justify-center items-center flex-col text-blue-300 relative">
 <!--      <Popover>
       <PopoverButton class="flex justify-center ">
@@ -27,7 +35,7 @@ import { usePlayerStore } from '../stores/playerStore.js'
 import DailyQuests from '@/components/quests/DailyQuests.vue';
 
 
-const aaa = ref(22)
+const loading = ref(true)
 
 const props = defineProps(['levelUp'])
 
@@ -49,6 +57,9 @@ const sss = () => {
 const isFirstRun = ref(false);
 
 onMounted(() => {
+  setTimeout(()=>{
+    loading.value = false
+  },300)
   player.value = store.player
   if (!localStorage.getItem('hasVisited')) {
     isFirstRun.value = true;

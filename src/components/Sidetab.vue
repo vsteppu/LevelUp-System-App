@@ -1,7 +1,7 @@
 <template>
-  <div class="md:hidden bg-neutral-900 z-10 h-16 flex w-full relative items-center mb-3">
+  <div class="md:hidden bg-neutral-900 z-10 h-16 flex w-full relative items-center ">
     <p @click="openSidetab = !openSidetab" class="pi pi-bars text-2xl ml-2 p-2"></p>
-    <p class=" font-bold text-2xl absolute left-1/2 transform -translate-x-1/2 pb-1 uppercase">{{playerName}}</p>
+    <p class=" font-bold text-2xl absolute left-1/2 transform -translate-x-1/2 pb-1 uppercase">maincharacter</p>
     <p @click="openSidetab = !openSidetab" v-if="openSidetab" class="pi pi-times text-2xl mr-2  p-2 absolute right-0"></p>
   </div>
 

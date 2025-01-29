@@ -55,11 +55,27 @@ export const useAuthStore = defineStore('authStore', () => {
     return user
   }
 
+  const deleteUser = async() =>{
+    const {data: { user }} = await supabase.auth.getUser()
+    const userId = user.id
+    try {
+      const { error } = await supabase.auth.admin.deleteUser(userId);
+      if (error) {
+        console.error('Error deleting user:', error.message);
+      } else {
+        console.log(`User with ID ${userId} deleted successfully.`);
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err);
+    }
+  }
+
   return {
     user,
     registerUser,
     logIn,
     getUser,
     addUserValues,
+    deleteUser,
   }
 })

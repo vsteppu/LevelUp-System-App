@@ -5,12 +5,15 @@
       <input type="text" v-model="email" placeholder="Email" class="my-2 w-96 bg-neutral-800 rounded-md px-4 py-1">
       <input type="password" v-model="password" placeholder="Password" class="my-2 w-96 bg-neutral-800 rounded-md px-4 py-1">
       <button v-if="registerPage" @click="signUp()" class="uppercase p-3 my-3 w-52 bg-neutral-600 rounded-3xl">register</button>
-      <button v-if="!registerPage" @click="signIn()" class="uppercase p-3 my-3 w-52 bg-neutral-600 rounded-3xl">login</button>
+      <button v-if="!registerPage" @click="signIn()" class="uppercase p-3 my-3 w-52 bg-neutral-600 rounded-3xl">
+        <p class="pi pi-sign-in"></p>
+        login
+      </button>
       <button @click="registerPage = !registerPage" class="uppercase p-2 my-3 font-light text-sm">
         {{ registerPage? 'Go to login':'Go to register'}}
       </button>
     </section>
-    <div class="text-green-600 text-shadow-green pb-2 text-2xl font-light flex justify-center items-center">
+    <div class="text-green-600 pb-2 text-2xl font-light flex justify-center items-center">
       {{ authStatus }}
     </div>
   </header>

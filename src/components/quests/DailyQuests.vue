@@ -2,11 +2,11 @@
   <main class="flex md:justify-center items-center flex-col relative">
     <div class="h-16 md:w-[400px] w-full px-4 flex align-middle justify-between items-center">
       <div
-        class=" h-12 w-12 flex items-center justify-center text-2xl text-center bg-neutral-900 rounded-sm ">
+        class=" h-12 w-12 flex items-center justify-center text-2xl text-center bg-neutral-800 rounded-sm ">
         <p class="pi pi-info-circle "></p>
       </div>
       <h1
-        class="uppercase text-3xl h-12 flex-grow flex items-center justify-center pb-1 border-[2px] border-neutral-900 rounded-sm">
+        class="uppercase text-3xl h-12 flex-grow flex items-center justify-center pb-1 border-[2px] border-neutral-800 rounded-sm">
         Daily Quest
       </h1>
     </div>
@@ -77,6 +77,7 @@ const playerLevel = ref(0)
 const timer = ref(0);
 const popupMessage = ref('')
 const playerName = ref('')
+const playerRank = ref('')
 const levelUpNotification = ref(false)
 
 const dailyExercise = ref([
@@ -105,6 +106,7 @@ const upgradeLevel = async () => {
   const user = await authStore.getUser()
   playerLevel.value = user.user_metadata.level
   dailyQuestCompleted.value = user.user_metadata.daily_quests
+  playerRank.value = user.user_metadata.rank
 }
 
 const resetCheckbox = async () => {
@@ -119,10 +121,6 @@ const userStatus = async () => {
   playerLevel.value = user.user_metadata.level
   playerName.value = user.user_metadata.name
   dailyQuestCompleted.value = user.user_metadata.daily_quests
-  console.log(user.user_metadata)
-  console.log(user.user_metadata.level)
-  console.log(user.user_metadata.name)
-  console.log(user.user_metadata.daily_quests)
 }
 
 watch(
@@ -133,42 +131,20 @@ watch(
   }
 );
 
-
-
-
-/* watch(
-  () => exerciseDone.value,
-  () => {
-    if (exerciseDone.value) {
-      emit('levelUp', playerLevel.value)
-      popupMessage.value = 'Level Up'
-      setTimeout(() => { levelUpNotification.value = true }, 400)
-      setTimeout(() => { levelUpNotification.value = false }, 1500)
-    }
-  }
-)
- */
-
 watch(
   () => timer.value,
   () => {
-    /*     if (timer.value === '00:00:01' && !exerciseDone.value) {
-          popupMessage.value = 'We are Sorry but. Times Up. A punishment will be applied'
-          setTimeout(() => { levelUpNotification.value = true }, 400)
-          setTimeout(() => { levelUpNotification.value = false }, 8500)
-          resetCheckbox()
-        } */
     if (timer.value === '00:00:01') {
       resetCheckbox()
     }
   }
 )
 
-onMounted(() => {
-  userStatus()
-  startCountdown((newTimer) => {
-    timer.value = newTimer
-  }
+onMounted(
+  async() => { await userStatus(),
+    startCountdown((newTimer) => {
+      timer.value = newTimer
+    },
   )
 }
 )
