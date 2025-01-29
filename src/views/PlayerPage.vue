@@ -5,7 +5,7 @@
   <!-- <PlayerInfo/>-->
 
   <main class="flex md:justify-center md:items-center flex-col bg-gradient-to-tl from-[#222222] to-neutral-900 bg-[#222222] md:mx-40 relative">
-    <div class="bg-neutral-800 md:w-96 mx-5 h-20 my-5 flex justify-center items-center font-light uppercase text-2xl">
+    <div class="bg-neutral-800 shadow-lg shadow-neutral-950 md:w-96 mx-5 h-20 my-5 flex justify-center items-center font-light uppercase text-2xl">
       <p class="pi pi-user"></p>
       player information
     </div>
@@ -64,7 +64,7 @@
     </div>
     <hr class="md:w-[650px] w-full border-neutral-600">
     <section class="my-6 md:pl-0 mx-auto flex flex-col">
-      <button @click="logOut()" class="uppercase py-4 mb-4 bg-neutral-800">
+      <button @click="logOut()" class="uppercase py-4 mb-4 bg-neutral-800 shadow-lg shadow-neutral-950">
         <p class="pi pi-sign-out mr-1"></p>
         logout</button>
       <button @click="deleteAccountPopup = true" class="uppercase p-1 font-light text-sm ">delete player</button>
@@ -72,7 +72,7 @@
     <teleport to="body">
       <transition name="slide-in" mode="out-in">
         <div v-if="deleteAccountPopup"
-          class="flex items-center justify-center flex-col bg-neutral-700 fixed top-1/3 left-1/2 md:w-[600px] w-full h-[250px] md:rounded-lg transform -translate-x-1/2 -translate-y-1/3">
+          class="flex items-center justify-center flex-col shadow-lg shadow-neutral-950 bg-neutral-900 fixed top-1/3 left-1/2 md:w-[600px] w-full h-[250px] md:rounded-lg transform -translate-x-1/2 -translate-y-1/3">
           <p class="uppercase text-xl mx-5 pb-8">Are you sure you want to delete account?</p>
           <div class="flex items-center justify-around w-full px-9 text-lg pb-4 ">
             <button @click="deleteAccountPopup = false"
