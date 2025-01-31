@@ -11,3 +11,16 @@ export const startCountdown = (setTimer) =>{
   getTime()
   setInterval(() =>{getTime()},1000)
 }
+
+export const monitorDate = () => {
+  const now = new Date();
+  const dateOnly = now.toISOString().split("T")[0]; // Formats as YYYY-MM-DD
+  return dateOnly
+}
+
+
+export const errorCodes = {
+  'Invalid login credentials': 'Invalid Login or Password. Try again',
+  'missing email or phone': 'Missing Email or Phone number',
+  'auth/too-many-requests': 'Too many requests to log in. Change your password or try later.',
+}

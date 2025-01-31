@@ -24,9 +24,14 @@ export const usePlayerStore = defineStore('store', () => {
     console.log(level)
   }
 
-  const completeDailyQuest = async() => {
+  const completeDailyQuest = async(getDate) => {
     const { data } = await supabase.auth.updateUser({
-      data: { daily_quests: true }
+      data: {
+        daily_quests: true,
+        dates: {
+          daily_quest_completed: getDate
+          }
+       }
     })
   }
   const resetDailyQuest = async() => {

@@ -63,9 +63,10 @@ import 'primeicons/primeicons.css'
 
 import { computed, onMounted, ref, watch } from 'vue';
 import { DAILY_QUESTS } from '@/stores/store'
-import { startCountdown } from '@/stores/helpers';
+import { startCountdown, monitorDate } from '@/stores/helpers';
 import { useAuthStore } from '@/stores/authStore.js';
 import { usePlayerStore } from '@/stores/playerStore.js';
+import { supabase } from '@/supabase'
 
 const authStore = useAuthStore()
 const playerStore = usePlayerStore()
@@ -101,11 +102,12 @@ const checked = computed(() => ['Pushups', 'Sit-ups', 'Squats', 'Running'].every
 );
 
 const upgradeLevel = async () => {
-  await playerStore.completeDailyQuest()
+  const getDate = monitorDate()
+  await playerStore.completeDailyQuest(getDate)
   await playerStore.levelUp()
   const user = await authStore.getUser()
   playerLevel.value = user.user_metadata.level
-  dailyQuestCompleted.value = user.user_metadata.daily_quests
+  dailyQuestCompleted.value = true
   playerRank.value = user.user_metadata.rank
 }
 
@@ -118,9 +120,16 @@ const resetCheckbox = async () => {
 
 const userStatus = async () => {
   const user = await authStore.getUser()
+  const currentDate = monitorDate()
+  const dailyQuestsLastExecutionDate = user.user_metadata.dates.daily_quest_completed
   playerLevel.value = user.user_metadata.level
   playerName.value = user.user_metadata.name
-  dailyQuestCompleted.value = user.user_metadata.daily_quests
+  if(dailyQuestsLastExecutionDate !== currentDate ) {
+    dailyQuestCompleted.value = false
+  }else{
+    dailyQuestCompleted.value = true
+  }
+
 }
 
 watch(
@@ -140,8 +149,21 @@ watch(
   }
 )
 
+
+const updateDailyQuest = async() => {
+  const { data } = await supabase.auth.updateUser({
+    data: { dates: {
+        daily_quest_completed: 'vsd'
+        }
+      }
+    }
+  )
+
+}
+
 onMounted(
-  async() => { await userStatus(),
+  async() => {
+    await userStatus(),
     startCountdown((newTimer) => {
       timer.value = newTimer
     },

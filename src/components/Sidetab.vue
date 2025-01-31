@@ -26,7 +26,6 @@ const userStatus = async () => {
   playerName.value = user.user_metadata.name
 }
 
-onMounted(()=>userStatus())
 </script>
 
 <style scoped>
