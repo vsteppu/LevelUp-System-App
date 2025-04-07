@@ -124,7 +124,7 @@ const addExecise = (item) => {
 }
 
 const checked = computed(() =>
-    ['Pushups', 'Sit-ups', 'Squats', 'Running'].every((exercise) =>
+    ['Pushups', 'Sit-ups', 'Squats'].every((exercise) =>
         checkedExercise.value.includes(exercise),
     ),
 )
