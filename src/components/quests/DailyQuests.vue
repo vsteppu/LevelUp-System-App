@@ -26,7 +26,7 @@
         </teleport>
         <div class="mt-5 md:w-[350px] w-full md:px-2 px-9 text-xl md:text-lg font-light">
             <form
-                v-for="item in dailyExercise"
+                v-for="item in DAILY_EXERCISE"
                 :key="item.id"
                 @click="addExecise(item)"
                 class="flex justify-between"
@@ -93,7 +93,7 @@
 import 'primeicons/primeicons.css'
 
 import { computed, onMounted, ref, watch } from 'vue'
-import { DAILY_QUESTS } from '@/stores/store'
+import { DAILY_QUESTS, DAILY_EXERCISE } from '@/stores/store'
 import { startCountdown, monitorDate } from '@/stores/helpers'
 import { useAuthStore } from '@/stores/authStore.js'
 import { usePlayerStore } from '@/stores/playerStore.js'
@@ -113,13 +113,6 @@ const popupMessage = ref('')
 const playerName = ref('')
 const playerRank = ref('')
 const levelUpNotification = ref(false)
-
-const dailyExercise = ref([
-    { id: 1, units: 'reps', value: 'Pushups', quantity: 100 },
-    { id: 2, units: 'reps', value: 'Sit-ups', quantity: 100 },
-    { id: 3, units: 'reps', value: 'Squats', quantity: 100 },
-    { id: 4, units: 'km', value: 'Running', quantity: 10 },
-])
 
 const emit = defineEmits(['levelUp'])
 

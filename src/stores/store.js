@@ -1,3 +1,5 @@
+import { ref } from "vue"
+
 export const DAILY_QUESTS = [
     'running',
     'pushup',
@@ -5,7 +7,7 @@ export const DAILY_QUESTS = [
     'situps',
 ]
 
-export const dailyExercise = ref([
+export const DAILY_EXERCISE = ref([
     { id: 1, units: 'reps', value: 'Pushups', quantity: 100 },
     { id: 2, units: 'reps', value: 'Sit-ups', quantity: 100 },
     { id: 3, units: 'reps', value: 'Squats', quantity: 100 },
