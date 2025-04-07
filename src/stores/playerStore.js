@@ -7,38 +7,38 @@ import { useAuthStore } from './authStore.js'
 
 
 export const usePlayerStore = defineStore('store', () => {
-  const authStore = useAuthStore()
+    const authStore = useAuthStore()
 
-  const levelUp = async() => {
-    const user = await authStore.getUser()
-    if(user.user_metadata.level === undefined || user.user_metadata.level === null){
-      const { data } = await supabase.auth.updateUser({
-        data: { level: 1 }
-      })
+    const levelUp = async() => {
+        const user = await authStore.getUser()
+        if(user.user_metadata.level === undefined || user.user_metadata.level === null){
+            const { data } = await supabase.auth.updateUser({
+                data: { level: 1 }
+            })
+        }
+        let level = user.user_metadata.level
+        level++
+        const { data } = await supabase.auth.updateUser({
+            data: { level: level }
+        })
+        console.log(level)
     }
-    let level = user.user_metadata.level
-    level++
-    const { data } = await supabase.auth.updateUser({
-      data: { level: level }
-    })
-    console.log(level)
-  }
 
-  const completeDailyQuest = async(getDate) => {
-    const { data } = await supabase.auth.updateUser({
-      data: {
-        daily_quests: true,
-        dates: {
-          daily_quest_completed: getDate
-          }
-       }
-    })
-  }
-  const resetDailyQuest = async() => {
-    const { data } = await supabase.auth.updateUser({
-      data: { daily_quests: false }
-    })
-  }
+    const completeDailyQuest = async(getDate) => {
+        const { data } = await supabase.auth.updateUser({
+            data: {
+                daily_quests: true,
+                dates: {
+                    daily_quest_completed: getDate
+                }
+            }
+        })
+    }
+    const resetDailyQuest = async() => {
+        const { data } = await supabase.auth.updateUser({
+            data: { daily_quests: false }
+        })
+    }
 
-  return {levelUp, completeDailyQuest, resetDailyQuest}
+    return {levelUp, completeDailyQuest, resetDailyQuest}
 })

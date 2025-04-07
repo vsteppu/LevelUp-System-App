@@ -1,16 +1,16 @@
 <template>
     <div class="uppercase  h-16 w-32 flex justify-between items-center font-montserrat font-light ">
         <h1
-            class="flex"
+        class="flex"
         >
-            player
-        </h1>
-        <div
-            class="flex"
-        >
-            Lv. {{ level }}
-        </div>
-    </div>
+        player
+    </h1>
+    <div
+    class="flex"
+    >
+    Lv. {{ level }}
+</div>
+</div>
 </template>
 <script setup>
 import { usePlayerStore } from '@/stores/playerStore'
