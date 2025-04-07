@@ -25,5 +25,4 @@ export const monitorDate = () => {
 export const errorCodes = {
     invalid_credentials: 'Invalid Login or Password. Try again',
     validation_failed: 'Missing Email or Phone number',
-    'auth/too-many-requests': 'Too many requests to log in. Change your password or try later.',
 }
