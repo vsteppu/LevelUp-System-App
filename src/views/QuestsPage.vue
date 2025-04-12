@@ -17,6 +17,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/authStore.js'
 import { usePlayerStore } from '@/stores/playerStore.js'
 
@@ -24,6 +25,8 @@ import QuestTemplate from '@/components/quests/QuestTemplate.vue'
 
 const authStore = useAuthStore()
 const playerStore = usePlayerStore()
+const { user } = storeToRefs(authStore)
+
 
 const loading = ref(true)
 

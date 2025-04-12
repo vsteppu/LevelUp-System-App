@@ -62,6 +62,7 @@
 </template>
 <script setup>
 import { onMounted, ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import { supabase } from '../supabase.js'
 import { useAuthStore } from '@/stores/authStore.js'
 import { errorCodes } from '../stores/helpers.js'
@@ -76,6 +77,7 @@ import { BeakerIcon } from '@heroicons/vue/24/solid'
 import router from '@/router/index.js'
 
 const authStore = useAuthStore()
+const { user } = storeToRefs(authStore)
 
 const registerPage = ref(false)
 const message = ref('')
@@ -127,11 +129,11 @@ console.log(error)
 message.value = 'error on log in'
 }
 } */
-const userStatus = async () => {
-    const user = await authStore.getUser(email)
-}
+//const userStatus = async () => {
+//    const user = await authStore.getUser(email)
+//}
 
-onMounted(() => {
-    userStatus()
-})
+//onMounted(() => {
+//    userStatus()
+//})
 </script>

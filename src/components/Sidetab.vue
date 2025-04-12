@@ -9,23 +9,23 @@
         <router-link to="/" class=" w-40 uppercase my-3 ml-4">Daily Quest</router-link>
         <router-link to="/quests" class=" w-40 uppercase my-3 ml-4">Quests</router-link>
         <router-link to="/player" class=" w-40 uppercase my-3 ml-4">Player</router-link>
-        <!-- <router-link to="/player" ><PLayerIcon/></router-link> -->
+        <div
+            class="w-40 uppercase my-3 ml-4"
+            @click="playerStore.toggleSettings()"
+        >
+            Settings
+        </div>
     </nav>
 </template>
 <script setup>
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { useAuthStore } from '@/stores/authStore.js';
+import { usePlayerStore } from '../stores/playerStore.js';
 
 const authStore = useAuthStore()
+const playerStore = usePlayerStore()
 
-const playerName = ref('MainCharacter')
 const openSidetab = ref(false)
-
-const userStatus = async () => {
-    const user = await authStore.getUser()
-    playerName.value = user.user_metadata.name
-}
-
 </script>
 
 <style scoped>

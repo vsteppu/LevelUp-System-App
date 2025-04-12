@@ -32,20 +32,4 @@ const quests = ref([
 { id: 3, quest: 'Build youre back', description: 'Include more back exercise in youre daily routine', status: false, },
 ])
 
-const shareLink = () => {
-    console.log(items.value)
-}
-
-
-const userStatus = async () => {
-    const user = await authStore.getUser()
-    playerLevel.value = user.user_metadata.level
-    playerName.value = user.user_metadata.name
-    dailyQuestCompleted.value = user.user_metadata.daily_quests
-    console.log(user.user_metadata)
-    console.log(user.user_metadata.level)
-    console.log(user.user_metadata.name)
-    console.log(user.user_metadata.daily_quests)
-}
-
 </script>

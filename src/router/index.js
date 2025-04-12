@@ -1,3 +1,4 @@
+import { storeToRefs } from 'pinia';
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore.js';
 
@@ -39,7 +40,7 @@ const router = createRouter({
 router.beforeEach(async(to) => {
 
     const authStore = useAuthStore()
-    const user = await authStore.getUser()
+    const { user } = storeToRefs(authStore)
 
     if (!user && to.meta.requiresAuth === true) {
         return { path: '/auth' }

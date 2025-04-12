@@ -5,7 +5,18 @@
             <router-link to="/" class="h-16  flex justify-center items-center uppercase">Daily Quest</router-link>
             <router-link to="/quests" class="h-16  flex justify-center items-center uppercase">Quests</router-link>
             <router-link to="/player" class="h-16  flex justify-center items-center uppercase">Player</router-link>
+            <Cog6Tooth
+                @click="playerStore.toggleSettings()"
+                class="size-6 cursor-pointer"
+            />
         </div>
     </nav>
     <router-view></router-view>
 </template>
+<script setup>
+import { usePlayerStore } from '../stores/playerStore'
+import Cog6Tooth from '@heroicons/vue/24/outline/Cog6ToothIcon.js'
+
+const playerStore = usePlayerStore()
+</script>
+

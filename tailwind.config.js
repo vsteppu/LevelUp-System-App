@@ -18,13 +18,10 @@ export default {
         'neon-green': '0 0 2px rgba(74, 222, 128, 0.8), 0 0 4px rgba(74, 222, 128, 0.7), 0 0 6px rgba(74, 222, 128, 0.6), 0 0 8px rgba(74, 222, 128, 0.5)',
       },
       colors: {
-        
-        text: {
-          DEFAULT: '#fffff', // Text negru implicit
-        },
+        'player-gray': '#222222',
       },
       backgroundImage: {
-        'player-bg': 'linear-gradient(45deg, rgb(249, 210, 210), rgb(197, 247, 180), rgb(244, 172, 90), rgb(52, 7, 54))',
+        'player-bg': 'linear-gradient(45deg, #222222, #171717)',
       },
     },
   },

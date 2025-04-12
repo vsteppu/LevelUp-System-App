@@ -1,11 +1,9 @@
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { supabase } from '../supabase.js'
-import router from '@/router/index.js'
-import { errorCodes } from '../stores/helpers.js'
 
 export const useAuthStore = defineStore('authStore', () => {
-    const user = ref(JSON.parse(localStorage.getItem('user')) ?? null)
+    const user = ref(null)
     const errorMessage = ref('')
 
     const registerUser = async (email, password) => {
@@ -26,8 +24,31 @@ export const useAuthStore = defineStore('authStore', () => {
                 quests: 0,
                 achivements: 0,
                 chalanges: 0,
+                difficulty_level: 'beginner',
             },
         })
+    }
+    const updateValues = async (value) => {
+        const { data } = await supabase.auth.updateUser({
+            data: {
+                difficulty_level: value,
+            },
+        })
+    }
+
+    const fetchUser = async () => {
+        try {
+            const { data: { session } } = await supabase.auth.getSession()
+
+            if (session?.user) {
+                user.value = session.user.user_metadata
+                console.log('user.value: ', user.value);
+            } else {
+                user.value = null
+            }
+        } catch (error) {
+            throw error
+        }
     }
 
     const logIn = async (email, password) => {
@@ -37,13 +58,6 @@ export const useAuthStore = defineStore('authStore', () => {
         })
         if (error) throw error
         return data
-    }
-
-    const getUser = async () => {
-        const {
-            data: { user },
-        } = await supabase.auth.getUser()
-        return user
     }
 
     const deleteUser = async () => {
@@ -67,8 +81,9 @@ export const useAuthStore = defineStore('authStore', () => {
         user,
         registerUser,
         logIn,
-        getUser,
         addUserValues,
         deleteUser,
+        fetchUser,
+        updateValues,
     }
 })

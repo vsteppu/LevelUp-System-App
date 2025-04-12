@@ -7,8 +7,9 @@
     </div>
     <!-- <PlayerInfo/>-->
 
+
     <main
-        class="flex md:justify-center md:items-center flex-col bg-gradient-to-tl from-[#222222] to-neutral-900 bg-[#222222] md:mx-40 relative"
+        class="flex md:justify-center md:items-center flex-col bg-gradient-to-tl from-player-gray to-neutral-900 bg-player-gray md:mx-40 relative"
     >
         <div
             class="bg-neutral-800 shadow-lg shadow-neutral-950 md:w-96 mx-5 h-20 my-5 flex justify-center items-center font-light uppercase text-2xl"
@@ -37,57 +38,12 @@
             Type your name in the field to start the game
         </p>
         <div
+            v-for="item in playerInfo"
             class="flex md:justify-between justify-between my-4 w-full md:w-[650px] md:px-2 px-6 text-xl md:text-xl uppercase"
         >
-            <p class="font-light">Player</p>
+            <p class="font-light">{{ item.key }}</p>
             <div class="font-bold">
-                {{ playerName }}
-            </div>
-        </div>
-        <hr class="md:w-[650px] w-full border-neutral-600" />
-        <div
-            class="flex md:justify-between justify-between my-4 md:w-[650px] md:px-2 px-6 text-xl md:text-xl font-bold uppercase"
-        >
-            <p class="font-light">Player level</p>
-            <div class="font-bold">
-                {{ playerLevel }}
-            </div>
-        </div>
-        <hr class="md:w-[650px] w-full border-neutral-600" />
-        <div
-            class="flex md:justify-between justify-between my-4 md:w-[650px] md:px-2 px-6 text-xl md:text-xl font-bold uppercase"
-        >
-            <p class="font-light">Player rank</p>
-            <div class="font-bold">
-                {{ playerRank }}
-            </div>
-        </div>
-        <hr class="md:w-[650px] w-full border-neutral-600" />
-        <div
-            class="flex md:justify-between justify-between my-4 md:w-[650px] md:px-2 px-6 text-xl md:text-xl font-bold uppercase"
-        >
-            <p class="font-light">Player speciality</p>
-            <div class="font-bold">
-                {{ playerSpeciality }}
-            </div>
-        </div>
-        <hr class="md:w-[650px] w-full border-neutral-600" />
-        <div
-            class="flex md:justify-between justify-between my-4 md:w-[650px] md:px-2 px-6 text-xl md:text-xl font-bold uppercase"
-        >
-            <p class="font-light">Player achivements</p>
-            <div class="font-bold">
-                {{ playerAchivements }}
-            </div>
-        </div>
-        
-        <hr class="md:w-[650px] w-full border-neutral-600" />
-        <div
-            class="flex md:justify-between justify-between my-4 md:w-[650px] md:px-2 px-6 text-xl md:text-xl font-bold uppercase"
-        >
-            <p class="font-light">Daily Quests</p>
-            <div class="font-bold">
-                {{ dailyQuest }}
+                {{ item.value }}
             </div>
         </div>
         <hr class="md:w-[650px] w-full border-neutral-600" />
@@ -114,7 +70,7 @@
                     </p>
                     <div class="flex items-center justify-around w-full px-9 text-lg pb-4">
                         <button
-                            @click="deleteAccountPopup = false"
+                            @click="authStore.addValues()"
                             class="w-40 h-12 bg-neutral-800 border-[1px] border-neutral-900"
                         >
                             Cancel
@@ -132,44 +88,31 @@
         </teleport>
         <span class="text-green-600 uppercase">{{ message }}</span>
     </main>
-    <!-- <StartNotification/> -->
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
 import { supabase, supabaseAdmin } from '../supabase.js'
 import { useAuthStore } from '@/stores/authStore.js'
-import { usePlayerStore } from '@/stores/playerStore.js'
-import { ref, onMounted } from 'vue'
-
-import StartNotification from '../components/StartNotification.vue'
 
 import router from '@/router/index.js'
 
 const authStore = useAuthStore()
-const playerStore = usePlayerStore()
+
+const { user } = storeToRefs(authStore)
+
+const playerInfo = ref({})
+const playerName = ref('')
 
 const loading = ref(true)
-const dailyQuest = ref(false)
-const deleteAccountPopup = ref(false)
-const playerName = ref('')
-const playerRank = ref('')
-const playerSpeciality = ref('')
-const playerAchivements = ref('')
 const setName = ref('')
 const userId = ref('')
 const message = ref('')
-const playerLevel = ref(0)
-let level = ref(0)
-
-const name = ref('')
-
-const upgrade = async () => {
-    const upgradeUser = playerStore.levelUp(level)
-}
+const deleteAccountPopup = ref(false)
 
 const setUserValues = async () => {
-    const user = await authStore.getUser()
-    if (user.user_metadata.name === undefined) {
+    if (user.value.name === undefined) {
         await authStore.addUserValues(playerName)
     }
     setName.value = false
@@ -177,24 +120,38 @@ const setUserValues = async () => {
 }
 
 const userStatus = async () => {
-    const user = await authStore.getUser()
-    playerName.value = user.user_metadata.name
-    setName.value = user.user_metadata.name
-    playerLevel.value = user.user_metadata.level
-    playerRank.value = user.user_metadata.rank
-    playerSpeciality.value = user.user_metadata.specialty
-    playerAchivements.value = user.user_metadata.achivements
-    if (user.user_metadata.daily_quests) {
-        dailyQuest.value = 'ACCOMPLISH'
-    } else {
-        dailyQuest.value = 'uncompleated'
-    }
-    console.log(user.user_metadata)
+    playerInfo.value = [
+        {
+            key: 'Player name',
+            value: user.value.name
+        },
+        {
+            key: 'Player level',
+            value: user.value.level
+        },
+        {
+            key: 'Player rank',
+            value: user.value.rank
+        },
+        {
+            key: 'Player specialty',
+            value: user.value.specialty
+        },
+        {
+            key: 'Player achivements',
+            value: user.value.achivements
+        },
+        {
+            key: 'Daily quests',
+            value: user.value.daily_quests
+        }
+    ]
 }
 
 const deleteUser = async () => {
     //const user = await authStore.deleteUser()
-    const user = await authStore.getUser()
+
+    console.log('user: ', user);
     userId.value = user.identities[0].user_id
     const { error } = await supabaseAdmin.auth.admin.deleteUser(userId.value)
     if (error) {
@@ -213,10 +170,11 @@ const logOut = async () => {
     router.push('/auth')
 }
 
-onMounted(() => {
-    setTimeout(() => {
-        loading.value = false
-    }, 300)
-    userStatus()
-})
+onMounted(async() => {
+    if(user !== null){
+            userStatus()
+            loading.value = false
+        }
+    }
+)
 </script>

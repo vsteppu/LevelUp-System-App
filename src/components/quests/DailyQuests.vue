@@ -31,14 +31,14 @@
                 @click="addExecise(item)"
                 class="flex justify-between"
             >
-                {{ item.value }}
+                {{ item.display }}
                 <div class="flex items-center">
                     [ {{ item.quantity }} {{ item.units }} ]
                     <p
                         class="flex justify-center items-center h-5 w-5 border-[1px] border-neutral-300 rounded-sm ml-3"
                     >
                         <span
-                            v-if="checkedExercise.includes(item.value) || dailyQuestCompleted"
+                            v-if="checkedExercise.includes(item.key) || dailyQuestCompleted"
                             class="pi pi-check text-green-400 text-shadow-green text-2xl"
                         >
                         </span>
@@ -90,24 +90,27 @@
     </section>
 </template>
 <script setup>
-import 'primeicons/primeicons.css'
-
 import { computed, onMounted, ref, watch } from 'vue'
-import { DAILY_QUESTS, DAILY_EXERCISE } from '@/stores/store'
+import { storeToRefs } from 'pinia'
+import { DIFFICULTY_LEVEL } from '../../stores/store'
 import { startCountdown, monitorDate } from '@/stores/helpers'
 import { useAuthStore } from '@/stores/authStore.js'
 import { usePlayerStore } from '@/stores/playerStore.js'
 import { supabase } from '@/supabase'
 
 import { ExclamationCircleIcon } from '@heroicons/vue/24/outline'
+import 'primeicons/primeicons.css'
 
 const authStore = useAuthStore()
 const playerStore = usePlayerStore()
+
+const { user } = storeToRefs(authStore)
 
 const checkedExercise = ref([])
 const exerciseDone = ref(false)
 const dailyQuestCompleted = ref(false)
 const playerLevel = ref(0)
+const DAILY_EXERCISE = ref('')
 const timer = ref(0)
 const popupMessage = ref('')
 const playerName = ref('')
@@ -115,6 +118,13 @@ const playerRank = ref('')
 const levelUpNotification = ref(false)
 
 const emit = defineEmits(['levelUp'])
+
+const checkDifficultyLevel = () => {
+    const findLevel = Object.keys(DIFFICULTY_LEVEL.value).find(
+        (key) => key === user.value?.difficulty_level
+    )
+    DAILY_EXERCISE.value = DIFFICULTY_LEVEL.value[findLevel]
+}
 
 const addExecise = (item) => {
     const check = checkedExercise.value.includes(item.value)
@@ -124,7 +134,7 @@ const addExecise = (item) => {
 }
 
 const checked = computed(() =>
-    ['Pushups', 'Sit-ups', 'Squats'].every((exercise) =>
+    ['Pushups', 'Sit-ups', 'Squats','Running'].every((exercise) =>
         checkedExercise.value.includes(exercise),
     ),
 )
@@ -133,30 +143,29 @@ const upgradeLevel = async () => {
     const getDate = monitorDate()
     await playerStore.completeDailyQuest(getDate)
     await playerStore.levelUp()
-    const user = await authStore.getUser()
-    playerLevel.value = user.user_metadata.level
+    playerLevel.value = user.value.level
     dailyQuestCompleted.value = true
-    playerRank.value = user.user_metadata.rank
+    playerRank.value = user.value.rank
 }
 
 const resetCheckbox = async () => {
     await playerStore.resetDailyQuest()
     checkedExercise.value = []
-    const user = await authStore.getUser()
-    dailyQuestCompleted.value = user.user_metadata.daily_quests
+
+    dailyQuestCompleted.value = user.value.daily_quests
 }
 
-const userStatus = async () => {
-    const user = await authStore.getUser()
+const getUserSettings = async () => {
     const currentDate = monitorDate()
-    const dailyQuestsLastExecutionDate = user.user_metadata.dates.daily_quest_completed
-    playerLevel.value = user.user_metadata.level
-    playerName.value = user.user_metadata.name
+    const dailyQuestsLastExecutionDate = user.value.dates.daily_quest_completed
+    playerLevel.value = user.value.level
+    playerName.value = user.value.name
     if (dailyQuestsLastExecutionDate !== currentDate) {
         dailyQuestCompleted.value = false
     } else {
         dailyQuestCompleted.value = true
     }
+
 }
 
 watch(
@@ -176,18 +185,8 @@ watch(
     },
 )
 
-const updateDailyQuest = async () => {
-    const { data } = await supabase.auth.updateUser({
-        data: {
-            dates: {
-                daily_quest_completed: 'vsd',
-            },
-        },
-    })
-}
-
 onMounted(async () => {
-    await userStatus(),
+        checkDifficultyLevel()
         startCountdown((newTimer) => {
             timer.value = newTimer
         })
