@@ -129,8 +129,6 @@ const props = defineProps({
 
 const { defaultValue, options, highlightQuery } = toRefs(props);
 
-console.log('label: ', props.label);
-
 const query = ref(null);
 const selectedValue = ref(defaultValue.value)
 

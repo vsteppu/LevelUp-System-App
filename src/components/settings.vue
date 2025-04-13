@@ -10,7 +10,7 @@
         >
             <div
                 v-if="showSettings"
-                class="fixed md:top-0 top-16 right-0 h-full w-[400px] bg-neutral-700 shadow-lg z-9990 flex flex-col p-4"
+                class="fixed md:top-0 top-16 right-0 h-full w-[400px] bg-neutral-800 shadow-lg z-9990 flex flex-col p-4"
             >
                 <div
                     class="flex justify-between items-center"
@@ -44,7 +44,7 @@
                 </div>
                 <button
                     @click="playerStore.toggleSettings()"
-                    class="mt-4 px-4 py-2 bg-player-gray rounded"
+                    class="mt-4 px-4 py-2 bg-player-gray rounded shadow-lg shadow-neutral-950"
                 >
                     Close
                 </button>

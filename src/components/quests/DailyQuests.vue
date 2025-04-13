@@ -26,9 +26,9 @@
         </teleport>
         <div class="mt-5 md:w-[350px] w-full md:px-2 px-9 text-xl md:text-lg font-light">
             <form
-                v-for="item in DAILY_EXERCISE"
+                v-for="item in dailyRoutine"
                 :key="item.id"
-                @click="addExecise(item)"
+                @click="addExecise(item.key)"
                 class="flex justify-between"
             >
                 {{ item.display }}
@@ -38,7 +38,7 @@
                         class="flex justify-center items-center h-5 w-5 border-[1px] border-neutral-300 rounded-sm ml-3"
                     >
                         <span
-                            v-if="checkedExercise.includes(item.key) || dailyQuestCompleted"
+                            v-if="checkedExercise.includes(item.key) || dailyRoutineCompleted"
                             class="pi pi-check text-green-400 text-shadow-green text-2xl"
                         >
                         </span>
@@ -47,25 +47,25 @@
             </form>
             <p
                 :class="
-                    dailyQuestCompleted
+                    dailyRoutineCompleted
                         ? 'text-green-600 text-shadow-green'
                         : 'text-red-600 text-shadow-red'
                 "
                 class="my-5 uppercase"
             >
                 {{
-                    dailyQuestCompleted ? 'Daily quest completed' : 'Daily quest not yet completed'
+                    dailyRoutineCompleted ? 'Daily quest completed' : 'Daily quest not yet completed'
                 }}
             </p>
         </div>
         <div
-            :class="dailyQuestCompleted ? 'from-green-600 to-green-950' : 'from-red-600 to-red-950'"
+            :class="dailyRoutineCompleted ? 'from-green-600 to-green-950' : 'from-red-600 to-red-950'"
             class="bg-gradient-to-b pb-2 text-5xl font-extrabold flex justify-center items-center text-transparent bg-clip-text"
         >
             {{ timer }}
         </div>
         <div
-            :class="dailyQuestCompleted ? 'from-green-600 to-green-950' : 'from-red-600 to-red-950'"
+            :class="dailyRoutineCompleted ? 'from-green-600 to-green-950' : 'from-red-600 to-red-950'"
             class="h-[1px] w-[400px] bg-gradient-to-b"
         ></div>
         <!--     <button @click="resetCheckbox()" class="h-12 w-[500px] bg-gradient-to-b from-red-600 to-red-900 ">Reset checkbox</button> -->
@@ -92,49 +92,39 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { DIFFICULTY_LEVEL } from '../../stores/store'
 import { startCountdown, monitorDate } from '@/stores/helpers'
 import { useAuthStore } from '@/stores/authStore.js'
 import { usePlayerStore } from '@/stores/playerStore.js'
-import { supabase } from '@/supabase'
 
 import { ExclamationCircleIcon } from '@heroicons/vue/24/outline'
-import 'primeicons/primeicons.css'
 
 const authStore = useAuthStore()
 const playerStore = usePlayerStore()
 
 const { user } = storeToRefs(authStore)
+const { dailyRoutine } = storeToRefs(playerStore)
 
+const playerName = ref(user.value?.name ?? '')
+const playerLevel = ref(user.value?.level ?? '')
+const dailyRoutineCompleted = ref(user.value?.daily_quests ?? false)
 const checkedExercise = ref([])
-const exerciseDone = ref(false)
-const dailyQuestCompleted = ref(false)
-const playerLevel = ref(0)
-const DAILY_EXERCISE = ref('')
+const difficultyLevel = ref('')
+const playerRank = ref('')
 const timer = ref(0)
 const popupMessage = ref('')
-const playerName = ref('')
-const playerRank = ref('')
 const levelUpNotification = ref(false)
 
 const emit = defineEmits(['levelUp'])
 
-const checkDifficultyLevel = () => {
-    const findLevel = Object.keys(DIFFICULTY_LEVEL.value).find(
-        (key) => key === user.value?.difficulty_level
-    )
-    DAILY_EXERCISE.value = DIFFICULTY_LEVEL.value[findLevel]
-}
-
 const addExecise = (item) => {
-    const check = checkedExercise.value.includes(item.value)
+    const check = checkedExercise.value.some((el)=> el === item)
     if (!check) {
-        checkedExercise.value.push(item.value)
+        checkedExercise.value.push(item)
     }
 }
 
 const checked = computed(() =>
-    ['Pushups', 'Sit-ups', 'Squats','Running'].every((exercise) =>
+    ['pushup', 'situps', 'squats','running'].every((exercise) =>
         checkedExercise.value.includes(exercise),
     ),
 )
@@ -142,51 +132,42 @@ const checked = computed(() =>
 const upgradeLevel = async () => {
     const getDate = monitorDate()
     await playerStore.completeDailyQuest(getDate)
-    await playerStore.levelUp()
+    await playerStore.levelUpPlayer()
     playerLevel.value = user.value.level
-    dailyQuestCompleted.value = true
     playerRank.value = user.value.rank
 }
 
 const resetCheckbox = async () => {
     await playerStore.resetDailyQuest()
     checkedExercise.value = []
-
-    dailyQuestCompleted.value = user.value.daily_quests
-}
-
-const getUserSettings = async () => {
-    const currentDate = monitorDate()
-    const dailyQuestsLastExecutionDate = user.value.dates.daily_quest_completed
-    playerLevel.value = user.value.level
-    playerName.value = user.value.name
-    if (dailyQuestsLastExecutionDate !== currentDate) {
-        dailyQuestCompleted.value = false
-    } else {
-        dailyQuestCompleted.value = true
-    }
-
 }
 
 watch(
-    () => checked.value,
+    checked === true,
     () => {
         upgradeLevel()
-        exerciseDone.value = true
     },
 )
 
 watch(
-    () => timer.value,
+    timer,
     () => {
         if (timer.value === '00:00:01') {
             resetCheckbox()
         }
     },
 )
+watch(
+    difficultyLevel,
+    () => {
+        console.log('difficultyLevel: ', difficultyLevel.value);
+
+        checkDifficultyLevel()
+    },
+)
 
 onMounted(async () => {
-        checkDifficultyLevel()
+        playerStore.checkDifficultyLevel()
         startCountdown((newTimer) => {
             timer.value = newTimer
         })

@@ -16,7 +16,6 @@ const { user } = storeToRefs(authStore)
 
 // Wait until we check for an existing session
 authStore.fetchUser().then(async() => {
-    console.log('user.value.difficulty_leve: ', user.value.difficulty_leve);
     if (user.value.difficulty_level === undefined || user.value.difficulty_level === null) {
         console.log('user.value.difficulty_level not find')
         console.log('creating user.value.difficulty_level...')
