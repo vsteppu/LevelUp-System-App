@@ -4,7 +4,9 @@
             <div
                 class="h-12 w-12 flex items-center justify-center text-2xl text-center bg-neutral-800 rounded-sm"
             >
-                <ExclamationCircleIcon class="size-8" />
+                <ExclamationCircleIcon
+                    class="size-8"
+                />
             </div>
             <h1
                 class="uppercase text-3xl h-12 flex-grow flex items-center justify-center pb-1 border-[2px] border-neutral-800 rounded-sm"
@@ -90,9 +92,9 @@
     </section>
 </template>
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, toRefs, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { startCountdown, monitorDate } from '@/stores/helpers'
+import { startCountdown } from '@/stores/helpers'
 import { useAuthStore } from '@/stores/authStore.js'
 import { usePlayerStore } from '@/stores/playerStore.js'
 
@@ -101,52 +103,37 @@ import { ExclamationCircleIcon } from '@heroicons/vue/24/outline'
 const authStore = useAuthStore()
 const playerStore = usePlayerStore()
 
-const { user } = storeToRefs(authStore)
+const { user, userMetaData } = storeToRefs(authStore)
 const { dailyRoutine } = storeToRefs(playerStore)
-
-const playerName = ref(user.value?.name ?? '')
-const playerLevel = ref(user.value?.level ?? '')
-const dailyRoutineCompleted = ref(user.value?.daily_quests ?? false)
-const checkedExercise = ref([])
-const difficultyLevel = ref('')
-const playerRank = ref('')
-const timer = ref(0)
-const popupMessage = ref('')
-const levelUpNotification = ref(false)
+const { name: playerName, difficulty_level  } = toRefs(userMetaData.value)
 
 const emit = defineEmits(['levelUp'])
 
+const checkedExercise = ref([])
+const timer = ref(0)
+const popupMessage = ref('')
+const levelUpNotification = ref(false)
+const dailyRoutineCompleted = computed(() => userMetaData.value?.daily_quests ?? false)
+const playerLevel = computed(() => userMetaData.value?.level)
+const isAllChecked = computed(() => ['pushup','squats','situps','running'].every((item) => checkedExercise.value.includes(item)))
+
 const addExecise = (item) => {
+    const arr = ['pushup','squats','situps','running']
     const check = checkedExercise.value.some((el)=> el === item)
-    if (!check) {
-        checkedExercise.value.push(item)
-    }
-}
 
-const checked = computed(() =>
-    ['pushup', 'situps', 'squats','running'].every((exercise) =>
-        checkedExercise.value.includes(exercise),
-    ),
-)
-
-const upgradeLevel = async () => {
-    const getDate = monitorDate()
-    await playerStore.completeDailyQuest(getDate)
-    await playerStore.levelUpPlayer()
-    playerLevel.value = user.value.level
-    playerRank.value = user.value.rank
+    if (!check) checkedExercise.value.push(item)
 }
 
 const resetCheckbox = async () => {
-    await playerStore.resetDailyQuest()
+    await playerStore.resetDailyQuest('daily_quests', false)
     checkedExercise.value = []
 }
 
-watch(
-    checked === true,
-    () => {
-        upgradeLevel()
-    },
+watch( isAllChecked,
+    async () => {
+        await playerStore.completeDailyQuest('daily_quests', true)
+        await playerStore.levelUpPlayer('level')
+    }
 )
 
 watch(
@@ -157,11 +144,10 @@ watch(
         }
     },
 )
-watch(
-    difficultyLevel,
-    () => {
-        console.log('difficultyLevel: ', difficultyLevel.value);
 
+watch(
+    difficulty_level,
+    () => {
         checkDifficultyLevel()
     },
 )

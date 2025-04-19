@@ -5,7 +5,8 @@ import { useAuthStore } from '@/stores/authStore.js';
 import HomePage from '../views/HomePage.vue'
 import QuestsPage from '../views/QuestsPage.vue'
 import PlayerPage from '../views/PlayerPage.vue'
-import AuthPage from '../views/AuthPage.vue'
+import LoginPage from '@/views/LoginPage.vue';
+import RegisterPage from '@/views/RegisterPage.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,9 +30,15 @@ const router = createRouter({
             meta: { requiresAuth: true }
         },
         {
-            path: '/auth',
-            name: 'auth',
-            component: AuthPage,
+            path: '/login',
+            name: 'login',
+            component: LoginPage,
+            meta: { requiresAuth: false }
+        },
+        {
+            path: '/register',
+            name: 'register',
+            component: RegisterPage,
             meta: { requiresAuth: false }
         },
     ],
@@ -43,7 +50,7 @@ router.beforeEach(async(to) => {
     const { user } = storeToRefs(authStore)
 
     if (!user && to.meta.requiresAuth === true) {
-        return { path: '/auth' }
+        return { name: 'login' }
     } else {
         return true
     }

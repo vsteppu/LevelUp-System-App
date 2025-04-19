@@ -30,31 +30,20 @@
                 </button>
             </div>
             <button
-                v-if="registerPage"
-                @click="signUp"
-                class="uppercase p-3 my-3 w-44 bg-neutral-900 shadow-lg shadow-neutral-900 rounded-3xl"
-            >
-                <p class="pi pi-power-off text-green-600 mr-1"></p>
-                register
-            </button>
-            <button
-                v-if="!registerPage"
                 @click="signIn"
                 class="uppercase p-3 my-3 w-44 bg-neutral-900 shadow-lg shadow-neutral-900 rounded-3xl"
             >
                 <p class="pi pi-sign-in text-green-600 mr-1"></p>
                 login
             </button>
-            <button
-                @click="registerPage = !registerPage"
-                class="uppercase p-2 my-3 font-light text-md hover:text-green-600"
-            >
-                {{ registerPage ? 'Go to login' : 'Go to register' }}
-            </button>
-            <div class="text-green-600 pb-2 text-2xl font-light flex justify-center items-center">
-                {{ authStatus }}
+            <router-link :to="{ name:'register'}">
+                <div
+                    class="uppercase p-2 my-3 font-light text-xs hover:text-green-600"
+                >
+                    Go to Register
             </div>
-            <div class="text-red-600 pb-2 text-2xl font-light flex justify-center items-center">
+            </router-link>
+            <div class="text-green-600 pb-2 text-2xl font-light flex justify-center items-center">
                 {{ message }}
             </div>
         </section>

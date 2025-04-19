@@ -1,18 +1,31 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { supabase } from '../supabase.js'
+import userApi from '../api/userApi.js'
 
 export const useAuthStore = defineStore('authStore', () => {
     const user = ref(null)
+    const userMetaData = ref(null)
     const errorMessage = ref('')
 
-    const registerUser = async (email, password) => {
-        const { data, error } = await supabase.auth.signUp({
-            email: email.value,
-            password: password.value,
-        })
-        return data
+    const registerUser = async (name, email, password) => {
+        const data = {
+            name: name,
+            level: 1,
+            rank: 'unknown',
+            specialty: 'unknown',
+            daily_quests: false,
+            quests: 0,
+            achivements: 0,
+            chalanges: 0,
+            difficulty_level: 'beginner',
+        }
+        await userApi.registerUser(email, password)
+        await userApi.setUserValues(data)
+        const response = fetchUser()
+        return response
     }
+
     const addUserValues = async (playerName) => {
         const { data } = await supabase.auth.updateUser({
             data: {
@@ -38,11 +51,14 @@ export const useAuthStore = defineStore('authStore', () => {
 
     const fetchUser = async () => {
         try {
-            const { data: { session } } = await supabase.auth.getSession()
+            const response = await userApi.getSupabaseUser()
+            console.log('response: ', response);
 
-            if (session?.user) {
-                user.value = session.user.user_metadata
+            if (response) {
+                user.value = response
                 console.log('user.value: ', user.value);
+                userMetaData.value = response.user_metadata
+                return user
             } else {
                 user.value = null
             }
@@ -52,12 +68,13 @@ export const useAuthStore = defineStore('authStore', () => {
     }
 
     const logIn = async (email, password) => {
-        let { data, error } = await supabase.auth.signInWithPassword({
-            email: email.value,
-            password: password.value,
-        })
-        if (error) throw error
-        return data
+        try {
+            const response = await userApi.authenticateUser( email, password )
+            fetchUser()
+            return response
+        } catch (err) {
+            throw err
+        }
     }
 
     const deleteUser = async () => {
@@ -79,6 +96,8 @@ export const useAuthStore = defineStore('authStore', () => {
 
     return {
         user,
+        userMetaData,
+
         registerUser,
         logIn,
         addUserValues,

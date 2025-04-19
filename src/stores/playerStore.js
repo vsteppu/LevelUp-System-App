@@ -1,55 +1,39 @@
 
 import { defineStore, storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { supabase } from '../supabase.js'
 import { DIFFICULTY_LEVEL } from '../stores/store'
 import { useAuthStore } from './authStore.js'
-import { monitorDate } from '../stores/helpers'
+import userApi from '../api/userApi.js'
 
 export const usePlayerStore = defineStore('store', () => {
     const authStore = useAuthStore()
-    const { user } = storeToRefs(authStore)
+    const { user, userMetaData } = storeToRefs(authStore)
 
     const showSettings = ref(false)
-    const dailyRoutine = ref([])
+    const userLevel = computed(() => userMetaData.value?.level)
+    const dailyRoutine = computed(() =>{
+        const level = userMetaData.value?.difficulty_level
+        return DIFFICULTY_LEVEL.value[level]
+    })
 
     const toggleSettings = () => {
         showSettings.value = !showSettings.value
     }
 
-    const levelUpPlayer = async() => {
-        if(user.value.level === undefined || user.value.level === null){
-            const { data } = await supabase.auth.updateUser({
-                data: { level: 0 }
-            })
-            return data
-        }
-        let level = user.value.level
+    const levelUpPlayer = async(key) => {
+        let level = userLevel.value
         level++
-        const { data } = await supabase.auth.updateUser({
-            data: { level: level }
-        })
-        return data
+        await userApi.updateSupabaseUser(key, level)
+        authStore.fetchUser()
     }
 
-    const completeDailyQuest = async() => {
-        const getDate = monitorDate()
-        const { data } = await supabase.auth.updateUser({
-            data: {
-                daily_quests: true,
-                dates: {
-                    daily_quest_completed: getDate
-                }
-            }
-        })
-        return data
+    const completeDailyQuest = async(key, value) => {
+        await userApi.updateSupabaseUser(key, value)
     }
 
-    const resetDailyQuest = async() => {
-        const { data } = await supabase.auth.updateUser({
-            data: { daily_quests: false }
-        })
-        return data
+    const resetDailyQuest = async(key, value) => {
+        await userApi.updateSupabaseUser(key, value)
     }
 
     const changeDifficultyLevel = async(difficultyLevel) => {
@@ -65,7 +49,7 @@ export const usePlayerStore = defineStore('store', () => {
         const findDifficultyLevel = Object.keys(DIFFICULTY_LEVEL.value).find(
             (key) => key === user.value?.difficulty_level
         )
-        dailyRoutine.value = DIFFICULTY_LEVEL.value[findDifficultyLevel]
+        return DIFFICULTY_LEVEL.value[findDifficultyLevel]
     }
 
     return {

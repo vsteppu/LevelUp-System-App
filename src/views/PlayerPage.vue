@@ -123,27 +123,27 @@ const userStatus = async () => {
     playerInfo.value = [
         {
             key: 'Player name',
-            value: user.value.name
+            value: user.value?.name
         },
         {
             key: 'Player level',
-            value: user.value.level
+            value: user.value?.level
         },
         {
             key: 'Player rank',
-            value: user.value.rank
+            value: user.value?.rank
         },
         {
             key: 'Player specialty',
-            value: user.value.specialty
+            value: user.value?.specialty
         },
         {
             key: 'Player achivements',
-            value: user.value.achivements
+            value: user.value?.achivements
         },
         {
             key: 'Daily quests',
-            value: user.value.daily_quests
+            value: user.value?.daily_quests
         }
     ]
 }
@@ -167,7 +167,7 @@ const deleteUser = async () => {
 
 const logOut = async () => {
     let { error } = await supabase.auth.signOut()
-    router.push('/auth')
+    router.push('/login')
 }
 
 onMounted(async() => {
