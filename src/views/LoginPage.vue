@@ -52,23 +52,16 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { supabase } from '../supabase.js'
+import router from '@/router/index.js'
 import { useAuthStore } from '@/stores/authStore.js'
 import { errorCodes } from '../stores/helpers.js'
 
 import { EyeIcon } from '@heroicons/vue/24/outline'
 import { EyeSlashIcon } from '@heroicons/vue/24/outline'
 
-import { BeakerIcon } from '@heroicons/vue/24/solid'
-
-//import EyeIcon from '@/components/icons/eyeIcon.vue'
-
-import router from '@/router/index.js'
 
 const authStore = useAuthStore()
-const { user } = storeToRefs(authStore)
 
-const registerPage = ref(false)
 const message = ref('')
 const authStatus = ref('')
 const email = ref('')
@@ -79,26 +72,16 @@ const togglePasswordVisibiliti = () => {
     isPasswordVisible.value = !isPasswordVisible.value
 }
 
-const signUp = async () => {
-    try {
-        const user = await authStore.registerUser(email.value, password.value)
-        if (user !== null) {
-            authStatus.value = `Account created successfully. Confirm your account by accessing the link sent to you email. Then you can log in`
-        }
-    } catch (error) {
-        message.value = errorCodes.code ?? error.message // Show Supabase error
-        console.log('message.value: ', message.value)
-    }
-}
 
 const signIn = async () => {
     try {
         const user = await authStore.logIn(email.value, password.value)
-        message.value = 'Login successfully'
-
-        setTimeout(() => {
-            router.push('/')
-        }, 1000)
+        if(user.user !== null) {
+            message.value = 'Login successfully'
+            setTimeout(() => {
+                router.push('/')
+            }, 2000)
+        }
     } catch (error) {
         message.value = errorCodes[error.code] ?? error.message // Show Supabase error
     }
