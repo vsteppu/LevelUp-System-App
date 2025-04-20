@@ -6,7 +6,7 @@
             <SetCredetials v-if="!user"/>
             <CreatePlayer v-else-if="user && !name"/>
             <div
-                v-else
+                v-if="autenticated"
                 class="text-green-600 p-20 text-2xl font-light flex justify-center items-center"
             >
                 You're ready to start the Game!
@@ -22,7 +22,7 @@
     </header>
 </template>
 <script setup>
-import { computed, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/authStore.js'
 import router from '@/router/index.js'
@@ -40,8 +40,9 @@ watch(authStatus,
 () => {
         autenticated.value = true
         setTimeout(() => {
-            router.push('/')
             autenticated.value = false
+            user.value = null
+            router.push('/')
         }, 3000)
     }
 )

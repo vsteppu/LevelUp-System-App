@@ -5,38 +5,15 @@
     >
         <p class="pi pi-spin pi-spinner text-7xl text-neutral-500 absolute"></p>
     </div>
-    <!-- <PlayerInfo/>-->
-
-
     <main
         class="flex md:justify-center md:items-center flex-col bg-gradient-to-tl from-player-gray to-neutral-900 bg-player-gray md:mx-40 relative"
     >
         <div
             class="bg-neutral-800 shadow-lg shadow-neutral-950 md:w-96 mx-5 h-20 my-5 flex justify-center items-center font-light uppercase text-2xl"
         >
-            <p class="pi pi-user"></p>
+            <p class="pi pi-userMetaData"></p>
             player information
         </div>
-        <div
-            v-if="setName === undefined"
-            class="font-light flex md:px-0 px-6 justify-between md:w-[450px]"
-        >
-            <input
-                v-model="playerName"
-                @keyup.enter="setUserValues(playerName)"
-                placeholder="type your name"
-                class="my-9 flex flex-grow mr-[2px] w-44 bg-neutral-700 px-4 py-1"
-            />
-            <button @click="setUserValues(playerName)" class="my-9 flex bg-neutral-700 px-2 py-1">
-                Confirm
-            </button>
-        </div>
-        <p
-            v-if="setName === undefined"
-            class="text-green-600 text-xl mb-9 font-light flex justify-center items-center"
-        >
-            Type your name in the field to start the game
-        </p>
         <div
             v-for="item in playerInfo"
             class="flex md:justify-between justify-between my-4 w-full md:w-[650px] md:px-2 px-6 text-xl md:text-xl uppercase"
@@ -70,16 +47,16 @@
                     </p>
                     <div class="flex items-center justify-around w-full px-9 text-lg pb-4">
                         <button
-                            @click="authStore.addValues()"
+                            @click="deleteAccountPopup = false"
                             class="w-40 h-12 bg-neutral-800 border-[1px] border-neutral-900"
                         >
                             Cancel
                         </button>
                         <button
                             @click="deleteUser()"
-                            class="w-40 h-12 bg-red-700 border-[1px] border-red-300 text-red-300"
+                            class="flex justify-center items-center w-40 h-12 bg-neutral-800 border-[1px] border-neutral-900 hover:text-red-700"
                         >
-                            <p class="pi pi-trash mr-2"></p>
+                            <TrashIcon class="size-6 mr-3"/>
                             Delete
                         </button>
                     </div>
@@ -91,28 +68,31 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { supabase, supabaseAdmin } from '../supabase.js'
+import router from '@/router/index.js'
 import { useAuthStore } from '@/stores/authStore.js'
 
-import router from '@/router/index.js'
+import TrashIcon from '@heroicons/vue/24/outline/TrashIcon.js'
 
 const authStore = useAuthStore()
 
-const { user } = storeToRefs(authStore)
+const { user, userMetaData } = storeToRefs(authStore)
 
 const playerInfo = ref({})
 const playerName = ref('')
 
+console.log('playerInfo: ', playerInfo.value);
+
+
 const loading = ref(true)
 const setName = ref('')
-const userId = ref('')
 const message = ref('')
 const deleteAccountPopup = ref(false)
 
 const setUserValues = async () => {
-    if (user.value.name === undefined) {
+    if (userMetaData.value.name === undefined) {
         await authStore.addUserValues(playerName)
     }
     setName.value = false
@@ -123,55 +103,58 @@ const userStatus = async () => {
     playerInfo.value = [
         {
             key: 'Player name',
-            value: user.value?.name
+            value: userMetaData.value?.name
+        },
+        {
+            key: 'Player email',
+            value: userMetaData.value?.email
         },
         {
             key: 'Player level',
-            value: user.value?.level
+            value: userMetaData.value?.level
         },
         {
             key: 'Player rank',
-            value: user.value?.rank
+            value: userMetaData.value?.rank
         },
         {
             key: 'Player specialty',
-            value: user.value?.specialty
+            value: userMetaData.value?.specialty
         },
         {
             key: 'Player achivements',
-            value: user.value?.achivements
+            value: userMetaData.value?.achivements
         },
         {
-            key: 'Daily quests',
-            value: user.value?.daily_quests
+            key: 'Daily quests completed',
+            value: userMetaData.value?.daily_quests
         }
     ]
 }
 
 const deleteUser = async () => {
-    //const user = await authStore.deleteUser()
-
-    console.log('user: ', user);
-    userId.value = user.identities[0].user_id
-    const { error } = await supabaseAdmin.auth.admin.deleteUser(userId.value)
-    if (error) {
+    //const userMetaData = await authStore.deleteUser()
+    const userId = user.value.id
+    //const { error } = await supabaseAdmin.auth.admin.deleteUser(userId)
+    const response = await authStore.deleteUser(userId)
+    if (response) {
         message.value = error.message
     } else {
         deleteAccountPopup.value = false
         message.value = `Player deleted successfully`
         setTimeout(() => {
-            router.push('/auth')
+            router.push('/login')
         }, 3000)
     }
 }
 
 const logOut = async () => {
-    let { error } = await supabase.auth.signOut()
-    router.push('/login')
+    let { error } = await authStore.signOut()
+    if (error === null) router.push('/login')
 }
 
 onMounted(async() => {
-    if(user !== null){
+    if(userMetaData !== null){
             userStatus()
             loading.value = false
         }

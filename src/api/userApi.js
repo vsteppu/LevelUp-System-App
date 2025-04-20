@@ -1,4 +1,4 @@
-import { supabase } from "@/supabase";
+import { supabase, supabaseAdmin } from "@/supabase";
 
 const registerUser = async (email, password) => {
     const response = await supabase.auth.signUp({ email, password })
@@ -36,6 +36,16 @@ const updateSupabaseUser = async(key, value) => {
     return response?.data?.user
 }
 
+const signOutUser = async() => {
+    const response = await supabase.auth.signOut()
+    return response
+}
+
+const deleteUserById = async(userId) => {
+    const response = await supabaseAdmin.auth.admin.deleteUser(userId)
+    return response.error
+}
+
 export default {
     registerUser,
     setUserValues,
@@ -43,4 +53,6 @@ export default {
     getSupabaseUser,
     getSupabaseSession,
     updateSupabaseUser,
+    signOutUser,
+    deleteUserById,
 }

@@ -24,6 +24,7 @@ export const useAuthStore = defineStore('authStore', () => {
             quests: 0,
             achivements: 0,
             chalanges: 0,
+            difficulty_level: 'beginner'
         }
         await userApi.setUserValues(data)
         fetchUser()
@@ -42,19 +43,20 @@ export const useAuthStore = defineStore('authStore', () => {
 
     const logIn = async (email, password) => {
         const response = await userApi.authenticateUser(email, password)
-        console.log('response: ', response);
         fetchUser()
         return response
     }
 
-    const deleteUser = async () => {
-        const {
-            data: { user },
-        } = await supabase.auth.getUser()
-        const userId = user.id
+    const signOut = async (email, password) => {
+        const response = await userApi.signOutUser(email, password)
+        return response
+    }
+
+    const deleteUser = async (userId) => {
+        console.log('userId: ', userId);
         try {
-            const { error } = await supabase.auth.admin.deleteUser(userId)
-            if (error) {
+            const response = await userApi.deleteUserById(userId)
+            if (response) {
                 console.error('Error deleting user:', error.message)
             } else {
                 console.log(`User with ID ${userId} deleted successfully.`)
@@ -71,6 +73,7 @@ export const useAuthStore = defineStore('authStore', () => {
 
         registerUser,
         logIn,
+        signOut,
         createUser,
         deleteUser,
         fetchUser,
