@@ -36,9 +36,11 @@ export const useAuthStore = defineStore('authStore', () => {
         if (data.user && error === null) {
             user.value = data.user
             userMetaData.value = user.value.user_metadata
+            return data.user
         } else {
             user.value = null
         }
+        return data.user
     }
 
     const logIn = async (email, password) => {
@@ -49,6 +51,7 @@ export const useAuthStore = defineStore('authStore', () => {
 
     const signOut = async (email, password) => {
         const response = await userApi.signOutUser(email, password)
+        fetchUser()
         return response
     }
 

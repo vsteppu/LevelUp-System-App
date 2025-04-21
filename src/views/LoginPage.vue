@@ -51,7 +51,6 @@
 </template>
 <script setup>
 import { onMounted, ref } from 'vue'
-import { storeToRefs } from 'pinia'
 import router from '@/router/index.js'
 import { useAuthStore } from '@/stores/authStore.js'
 import { errorCodes } from '../stores/helpers.js'
@@ -63,7 +62,6 @@ import { EyeSlashIcon } from '@heroicons/vue/24/outline'
 const authStore = useAuthStore()
 
 const message = ref('')
-const authStatus = ref('')
 const email = ref('')
 const password = ref('')
 const isPasswordVisible = ref(false)
@@ -72,7 +70,6 @@ const togglePasswordVisibiliti = () => {
     isPasswordVisible.value = !isPasswordVisible.value
 }
 
-
 const signIn = async () => {
     try {
         const user = await authStore.logIn(email.value, password.value)
@@ -80,10 +77,15 @@ const signIn = async () => {
             message.value = 'Login successfully'
             setTimeout(() => {
                 router.push('/')
-            }, 2000)
+            }, 1000)
         }
     } catch (error) {
         message.value = errorCodes[error.code] ?? error.message // Show Supabase error
     }
 }
+onMounted( async() => {
+    await authStore.fetchUser()
+    console.log(authStore.user);
+    }
+)
 </script>
