@@ -26,7 +26,7 @@
         <hr class="md:w-[650px] w-full border-neutral-600" />
         <section class="my-6 md:pl-0 mx-auto flex flex-col">
             <button
-                @click="logOut()"
+                @click="logOut"
                 class="uppercase py-4 mb-4 bg-neutral-800 shadow-lg shadow-neutral-950"
             >
                 <p class="pi pi-sign-out mr-1"></p>
@@ -37,43 +37,51 @@
             </button>
         </section>
         <teleport to="body">
-            <transition name="slide-in" mode="out-in">
+            <transition name="fade" mode="out-in">
                 <div
                     v-if="deleteAccountPopup"
-                    class="flex items-center justify-center flex-col shadow-lg shadow-neutral-950 bg-neutral-900 fixed top-1/3 left-1/2 md:w-[600px] w-full h-[250px] md:rounded-lg transform -translate-x-1/2 -translate-y-1/3"
+                    class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center"
                 >
-                    <p class="uppercase text-xl mx-5 pb-8">
-                        Are you sure you want to delete account?
-                    </p>
-                    <div class="flex items-center justify-around w-full px-9 text-lg pb-4">
-                        <button
-                            @click="deleteAccountPopup = false"
-                            class="w-40 h-12 bg-neutral-800 border-[1px] border-neutral-900"
+                    <div
+                        class="flex items-center justify-center flex-col shadow-lg shadow-neutral-950 bg-neutral-900 fixed top-1/3 left-1/2 md:w-[600px] w-full h-[250px] md:rounded-lg transform -translate-x-1/2 -translate-y-1/3"
+                    >
+                        <span
+                            :class="['uppercase text-xl mx-5 pb-8', {'text-green-600': deleteConfirmed }]"
                         >
-                            Cancel
-                        </button>
-                        <button
-                            @click="deleteUser()"
-                            class="flex justify-center items-center w-40 h-12 bg-neutral-800 border-[1px] border-neutral-900 hover:text-red-700"
+                            {{ popupMessage }}
+                        </span>
+                        <div
+                            v-if="!deleteConfirmed"
+                            class="flex items-center justify-around w-full px-9 text-lg pb-4"
                         >
-                            <TrashIcon class="size-6 mr-3"/>
-                            Delete
-                        </button>
+                            <button
+                                @click="() => deleteAccountPopup = false"
+                                class="w-40 h-12 bg-neutral-800 border-[1px] border-neutral-900"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                @click="deleteUser"
+                                class="flex justify-center items-center w-40 h-12 bg-neutral-800 border-[1px] border-neutral-900 hover:text-red-700"
+                            >
+                                <TrashIcon class="size-6 mr-3"/>
+                                Delete
+                            </button>
+                        </div>
                     </div>
                 </div>
             </transition>
         </teleport>
-        <span class="text-green-600 uppercase">{{ message }}</span>
     </main>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { supabase, supabaseAdmin } from '../supabase.js'
-import router from '@/router/index.js'
 import { useAuthStore } from '@/stores/authStore.js'
+import router from '@/router/index.js'
 
+import '../assets/fade.css'
 import TrashIcon from '@heroicons/vue/24/outline/TrashIcon.js'
 
 const authStore = useAuthStore()
@@ -81,23 +89,11 @@ const authStore = useAuthStore()
 const { user, userMetaData } = storeToRefs(authStore)
 
 const playerInfo = ref({})
-const playerName = ref('')
-
-console.log('playerInfo: ', playerInfo.value);
-
 
 const loading = ref(true)
-const setName = ref('')
-const message = ref('')
+const deleteConfirmed = ref(false)
+const popupMessage = ref('Are you sure you want to delete account?')
 const deleteAccountPopup = ref(false)
-
-const setUserValues = async () => {
-    if (userMetaData.value.name === undefined) {
-        await authStore.addUserValues(playerName)
-    }
-    setName.value = false
-    router.push('/')
-}
 
 const userStatus = async () => {
     playerInfo.value = [
@@ -133,15 +129,13 @@ const userStatus = async () => {
 }
 
 const deleteUser = async () => {
-    //const userMetaData = await authStore.deleteUser()
     const userId = user.value.id
-    //const { error } = await supabaseAdmin.auth.admin.deleteUser(userId)
     const response = await authStore.deleteUser(userId)
     if (response) {
-        message.value = error.message
+        popupMessage.value = error.popupMessage
     } else {
-        deleteAccountPopup.value = false
-        message.value = `Player deleted successfully`
+        deleteConfirmed.value = true
+        popupMessage.value = `Player deleted successfully`
         setTimeout(() => {
             router.push('/login')
         }, 3000)

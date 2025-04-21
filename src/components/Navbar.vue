@@ -30,6 +30,5 @@ const authStore = useAuthStore()
 const playerStore = usePlayerStore()
 const { user } = storeToRefs(authStore)
 const isAutenticated = computed(() => user.value !== null)
-console.log('isAutenticated: ', isAutenticated.value);
 </script>
 
