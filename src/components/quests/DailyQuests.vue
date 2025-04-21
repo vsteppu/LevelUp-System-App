@@ -1,6 +1,6 @@
 <template>
-    <main class="flex md:justify-center items-center flex-col relative">
-        <div class="h-16 md:w-[400px] w-full px-4 flex align-middle justify-between items-center">
+    <main class="flex md:justify-center items-center flex-col relative w-full">
+        <div class="h-16 md:w-[400px] w-full md:px-4 flex align-middle justify-between items-center">
             <div
                 class="h-12 w-12 flex items-center justify-center text-2xl text-center bg-neutral-800 rounded-sm"
             >
@@ -26,7 +26,7 @@
                 </div>
             </transition>
         </teleport>
-        <div class="mt-5 md:w-[350px] w-full md:px-2 px-9 text-xl md:text-lg font-light">
+        <div class="mt-5 md:w-[350px] w-screen md:px-2 px-9 text-xl md:text-lg font-light">
             <form
                 v-for="item in dailyRoutine"
                 :key="item.id"
@@ -66,11 +66,7 @@
         >
             {{ timer }}
         </div>
-        <div
-            :class="dailyRoutineCompleted ? 'from-green-600 to-green-950' : 'from-red-600 to-red-950'"
-            class="h-[1px] w-[400px] bg-gradient-to-b"
-        ></div>
-        <!--     <button @click="resetCheckbox()" class="h-12 w-[500px] bg-gradient-to-b from-red-600 to-red-900 ">Reset checkbox</button> -->
+        <hr :class="[dailyRoutineCompleted ? 'border-green-600' : 'border-red-600', 'md:w-[650px] w-full']"/>
     </main>
     <section class="flex md:justify-center md:items-center flex-col relative">
         <div

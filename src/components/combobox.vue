@@ -18,12 +18,12 @@
 
             <ComboboxInput
                 @change="query = $event.target.value"
-                class="capitalize bg-player-gray shadow-lg shadow-neutral-950 rounded px-4 py-1 w-full"
+                class="capitalize bg-player-gray shadow-lg shadow-neutral-950 rounded px-4 py-2 w-full"
                 :placeholder="placeholder"
                 :disabled="disableTyping"
             />
 
-            <ComboboxButton class="absolute inset-y-0 right-1 flex items-center">
+            <ComboboxButton class="absolute w-full justify-end inset-y-0 right-1 flex items-center">
                 <ChevronDownIcon
                     class="size-4"
                 />

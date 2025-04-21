@@ -6,12 +6,13 @@
         <p class="pi pi-spin pi-spinner text-7xl text-neutral-500 absolute"></p>
     </div>
     <div
-        class="md:w-[800px] p-10 h-[calc(100vh-64px)] items-center mx-auto bg-gradient-to-tl from-[#222222] to-neutral-900"
+        class="md:w-[800px] p-5 h-[calc(100vh-64px)] items-center mx-auto bg-gradient-to-tl from-[#222222] to-neutral-900"
     >
         <DailyQuests @levelUp="upgradeLevel(player)" />
     </div>
+    <!--
     <div class="flex justify-center items-center flex-col text-blue-300 relative">
-        <!--      <Popover>
+              <Popover>
         <PopoverButton class="flex justify-center ">
             <span class=" font-light ">Info</span>
         </PopoverButton>
@@ -23,9 +24,10 @@
                 levels, quests, challages and other achivements gained in the app will be reset.
             </p>
         </PopoverPanel>
-    </Popover> -->
-        <!-- <button @click="sss()" class="rounded-md w-48 h-12 bg-orange-800">here to see</button> -->
+    </Popover>
+    <button @click="sss()" class="rounded-md w-48 h-12 bg-orange-800">here to see</button>
     </div>
+    -->
 </template>
 
 <script setup>

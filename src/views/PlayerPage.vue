@@ -9,14 +9,14 @@
         class="flex md:justify-center md:items-center flex-col bg-gradient-to-tl from-player-gray to-neutral-900 bg-player-gray md:mx-40 relative"
     >
         <div
-            class="bg-neutral-800 shadow-lg shadow-neutral-950 md:w-96 mx-5 h-20 my-5 flex justify-center items-center font-light uppercase text-2xl"
+            class="bg-neutral-800 shadow-lg shadow-neutral-950 md:w-96 mx-5 h-20 my-5 flex justify-center items-center font-light uppercase md:text-2xl text-xl"
         >
             <p class="pi pi-userMetaData"></p>
             player information
         </div>
         <div
             v-for="item in playerInfo"
-            class="flex md:justify-between justify-between my-4 w-full md:w-[650px] md:px-2 px-6 text-xl md:text-xl uppercase"
+            class="flex md:justify-between justify-between md:my-4 my-2 w-full md:w-[650px] md:px-2 px-6 md:text-xl uppercase"
         >
             <p class="font-light">{{ item.key }}</p>
             <div class="font-bold">
