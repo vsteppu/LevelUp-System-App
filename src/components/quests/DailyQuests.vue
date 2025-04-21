@@ -41,7 +41,7 @@
                     >
                         <span
                             v-if="checkedExercise.includes(item.key) || dailyRoutineCompleted"
-                            class="pi pi-check text-green-400 text-shadow-green text-2xl"
+                            class="pi pi-check text-green-400 text-shadow-green text-2xl text-neutral-700"
                         >
                         </span>
                     </p>
