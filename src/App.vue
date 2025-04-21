@@ -13,7 +13,7 @@ import { useAuthStore } from './stores/authStore'
 import { useNotifications } from "../src/stores/notifications.store.js";
 
 import Settings from './components/settings.vue';
-import Sidetab from './components/sidetab.vue';
+import Sidetab from './components/side-tab.vue';
 import Navbar from './components/Navbar.vue';
 import NotificationIcon from './components/details/NotificationIcon.vue';
 import GetUpdates from './components/authentication/get-updates.vue';
