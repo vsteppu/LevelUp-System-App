@@ -36,6 +36,10 @@ export const usePlayerStore = defineStore('store', () => {
         await userApi.updateSupabaseUser(key, value)
     }
 
+    const changeDailyQuestDate = async() => {
+        await userApi.updateDailyQuestDate()
+    }
+
     const changeDifficultyLevel = async(difficultyLevel) => {
         const { data } = await supabase.auth.updateUser({
             data: { difficulty_level: difficultyLevel}
@@ -61,5 +65,6 @@ export const usePlayerStore = defineStore('store', () => {
         resetDailyQuest,
         changeDifficultyLevel,
         checkDifficultyLevel,
+        changeDailyQuestDate
     }
 })

@@ -1,4 +1,5 @@
 import { supabase, supabaseAdmin } from "@/supabase";
+import { monitorDate } from "@/stores/helpers";
 
 const registerUser = async (email, password) => {
     const response = await supabase.auth.signUp({ email, password })
@@ -25,7 +26,6 @@ const getSupabaseUser = async() => {
 
 const getSupabaseSession = async() => {
     const response = await supabase.auth.getSession()
-    console.log('response: ', response);
     if (response.error) throw response.error
     return response.data?.session
 }
@@ -35,6 +35,13 @@ const updateSupabaseUser = async(key, value) => {
     if (response.error) throw response.error
     return response?.data?.user
 }
+
+const updateDailyQuestDate = async() => {
+    const response = await supabase.auth.updateUser({ data:{daily_quest_date: monitorDate()}})
+    if (response.error) throw response.error
+    return response?.data?.user
+}
+
 
 const signOutUser = async() => {
     const response = await supabase.auth.signOut()
@@ -55,4 +62,5 @@ export default {
     updateSupabaseUser,
     signOutUser,
     deleteUserById,
+    updateDailyQuestDate,
 }

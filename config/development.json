@@ -1,0 +1,12 @@
+{
+  	"app": {
+  	  	"port": 7000
+  	},
+	"db": {
+		"host": "localhost",
+		"port": 3306,
+		"name": "main_characters",
+		"user": "root",
+		"pass": "wonsultingai"
+	}
+}

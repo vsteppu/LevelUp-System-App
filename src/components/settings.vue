@@ -31,10 +31,10 @@
                         :options="DIFFICULTY"
                         @value:update="updateDifficulty"
                         optionsContainerHeight="max-h-[250px]"
-                        :placeholder="userMetaData.difficulty_level"
+                        :placeholder="userMetaData?.difficulty_level"
                         :openOnFocus="true"
                         :highlightQuery="true"
-                        :defaultValue="userMetaData.difficulty_level"
+                        :defaultValue="userMetaData?.difficulty_level"
                         :comboBoxWidth="'md:w-40 w-full'"
                         :disableTyping="true"
                         :disableOverflow="true"
@@ -66,7 +66,6 @@ import XMarkIcon from '@heroicons/vue/24/outline/XMarkIcon.js'
 const authStore = useAuthStore()
 const playerStore = usePlayerStore()
 const { userMetaData } = storeToRefs(authStore)
-console.log('user: ', userMetaData.value.difficulty_level);
 const { showSettings } = storeToRefs(playerStore)
 
 const updateDifficulty = (newValue) => {

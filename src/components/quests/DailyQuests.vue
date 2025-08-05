@@ -40,8 +40,8 @@
                         class="flex justify-center items-center h-5 w-5 border-[1px] border-neutral-300 rounded-sm ml-3"
                     >
                         <span
-                            v-if="checkedExercise.includes(item.key) || dailyRoutineCompleted"
-                            class="pi pi-check text-green-400 text-shadow-green text-2xl text-neutral-700"
+                            v-if="dailyExercise?.includes(item.key) || dailyRoutineCompleted"
+                            class="pi pi-check text-green-400 text-shadow-green text-2xl"
                         >
                         </span>
                     </p>
@@ -90,65 +90,73 @@
 <script setup>
 import { computed, onMounted, ref, toRefs, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { startCountdown } from '@/stores/helpers'
+import { monitorDate, startCountdown } from '@/stores/helpers'
 import { useAuthStore } from '@/stores/authStore.js'
 import { usePlayerStore } from '@/stores/playerStore.js'
 
-import { ExclamationCircleIcon } from '@heroicons/vue/24/outline'
+import { ExclamationCircleIcon, CheckIcon } from '@heroicons/vue/24/outline'
 
 const authStore = useAuthStore()
 const playerStore = usePlayerStore()
 
 const { user, userMetaData } = storeToRefs(authStore)
 const { dailyRoutine } = storeToRefs(playerStore)
-const { name: playerName, difficulty_level  } = toRefs(userMetaData.value)
+const { name: playerName, difficulty_level, daily_quest_date, dayly_quest_date } = toRefs(userMetaData.value)
 
 const emit = defineEmits(['levelUp'])
 
-const checkedExercise = ref([])
+const dailyExercise = ref([])
 const timer = ref(0)
 const popupMessage = ref('')
 const levelUpNotification = ref(false)
-const dailyRoutineCompleted = computed(() => userMetaData.value?.daily_quests ?? false)
+const dailyRoutineCompleted = computed(() => daily_quest_date?.value === monitorDate())
 const playerLevel = computed(() => userMetaData.value?.level)
-const isAllChecked = computed(() => ['pushup','squats','situps','running'].every((item) => checkedExercise.value.includes(item)))
+const isAllChecked = computed(() => ['pushup','squats','situps','running'].every((item) => dailyExercise.value.includes(item)))
+
+console.log('userMetaData: ', userMetaData.value);
+console.log('dayly_quest_date: ', dayly_quest_date.value);
+console.log('dailyRoutineCompleted: ', dailyRoutineCompleted.value);
 
 const addExecise = (item) => {
-    const arr = ['pushup','squats','situps','running']
-    const check = checkedExercise.value.some((el)=> el === item)
-
-    if (!check) checkedExercise.value.push(item)
+    const stored = localStorage.getItem('checkedExercise')
+    if (stored === null) {
+        localStorage.setItem('checkedExercise', JSON.stringify([item]))
+        const checkedExercise = JSON.parse(localStorage.getItem('checkedExercise'))
+        dailyExercise.value = checkedExercise
+    } else {
+        const checkedExercise = JSON.parse(stored)
+        const check = checkedExercise.some((el)=> el === item)
+        if (!check) {
+            checkedExercise.push(item)
+            localStorage.setItem('checkedExercise', JSON.stringify(checkedExercise))
+            dailyExercise.value = checkedExercise
+        }
+    }
 }
 
-const resetCheckbox = async () => {
-    await playerStore.resetDailyQuest('daily_quests', false)
-    checkedExercise.value = []
-}
-
-watch( isAllChecked,
+watch(
+    isAllChecked,
     async () => {
         await playerStore.completeDailyQuest('daily_quests', true)
         await playerStore.levelUpPlayer('level')
+        await playerStore.changeDailyQuestDate()
     }
-)
-
-watch(
-    timer,
-    () => {
-        if (timer.value === '00:00:01') {
-            resetCheckbox()
-        }
-    },
 )
 
 watch(
     difficulty_level,
     () => {
-        checkDifficultyLevel()
+        playerStore.checkDifficultyLevel()
     },
 )
 
-onMounted(async () => {
+onMounted(
+    async () => {
+        if (!dailyRoutineCompleted.value) {
+            await playerStore.resetDailyQuest('daily_quests', false)
+            const checkedExercise = JSON.parse(localStorage.getItem('checkedExercise'))
+            dailyExercise.value = checkedExercise !== null ? checkedExercise : []
+        }
         playerStore.checkDifficultyLevel()
         startCountdown((newTimer) => {
             timer.value = newTimer

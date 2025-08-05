@@ -52,11 +52,6 @@ const upgradeLevel = (playerLevel) => {
     console.log(player.value)
 }
 
-const sss = () => {
-    console.log(store.player.level)
-    //  localStorage.getItem(playerLevel)
-}
-
 const isFirstRun = ref(false)
 
 onMounted(() => {

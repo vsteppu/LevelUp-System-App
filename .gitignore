@@ -26,6 +26,7 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+*.env
 
 *.tsbuildinfo
 supabase_backup/db_cluster-22-02-2025@07-17-35.backup.gz
