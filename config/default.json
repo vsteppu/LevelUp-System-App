@@ -1,5 +1,0 @@
-{
-  "appName": "LevelUp System",
-  "port": 7000,
-  "dbUrl": "mongodb://localhost/default"
-}
