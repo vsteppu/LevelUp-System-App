@@ -1,6 +1,0 @@
-name = "maincharacters"
-compatibility_date = "2025-08-05"
-pages_build_output_dir = "./dist"
-
-[functions]
-directory = "functions"
