@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-import { DAILY_EXERCISE } from '../stores/store'
+import { DAILY_EXERCISE } from './store'
 import { useAuthState } from "@/composables/auth";
 import { deleteAllExercisesAPI, deleteExerciseAPI, getExercisesAPI, postExercisesAPI } from "@/api/exercises-api";
 
