@@ -24,6 +24,7 @@ export const useAuthStore = defineStore('authStore',()=>{
 
     const loginUser = async (data) => {
         const token = await googleToken.getToken();
+        console.log('token: ', token);
 
         const { email, password } = data
 
