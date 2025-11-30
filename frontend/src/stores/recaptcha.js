@@ -4,41 +4,39 @@ import { ref, watch } from "vue";
 export const useGoogleToken = defineStore( "cloudflare-turnstile", () => {
     const siteKey = import.meta.env.VITE_GOOGLE_SITE_KEY;
     const isRecaptchaEnabled = import.meta.env.VITE_GOOGLE_RECAPTCHA_ENABLED === 'true'
-    console.log('isRecaptchaEnabled: ', isRecaptchaEnabled);
     const reCaptchaToken = ref(null);
+    const WIDGET_CONTAINER = 'reCaptchaContainer';
+    const widgetId = ref(null);
 
     const insertWidget = async () => {
-        grecaptcha.ready(() => {
-            grecaptcha.execute(siteKey, { action: 'submit' })
-            .then(token => {
-                reCaptchaToken.value = token
-            })
-        })
+        const grecaptchaContainer = document.getElementById(WIDGET_CONTAINER);
+
+        widgetId.value = await window.grecaptcha.render(grecaptchaContainer, {
+            sitekey: siteKey,
+            size: "invisible"
+        });
+
+        reCaptchaToken.value = await window.grecaptcha.execute(widgetId.value);
     };
 
-    const getToken = async () => {
-        if(!isRecaptchaEnabled) return
-        // Promise to ensure reCaptchaToken gets values
-        if (reCaptchaToken.value == null) {
-            const response = await new Promise((resolve) => {
-                const stop = watch(reCaptchaToken, (val) => {
-                    if (val) {
-                        stop();
-                        resolve(val);
-                    }
-                });
-            });
+    const getToken = async() => {
+        if(widgetId.value == null) {
+            await insertWidget();
+        }
 
-            return response;
-        } else return reCaptchaToken.value;
-    };
+        await window.grecaptcha.reset();
+        return await window.grecaptcha.execute(widgetId.value);
+    }
+
 
     watch(reCaptchaToken, () => {
         console.log("🧩 TOKEN");
     });
 
     return {
+        siteKey,
         reCaptchaToken,
+
         insertWidget,
         getToken,
     };

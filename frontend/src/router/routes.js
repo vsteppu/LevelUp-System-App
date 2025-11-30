@@ -1,7 +1,5 @@
 import Home from '@/pages/home.vue'
-import LoginPage from '@/pages/auth/login.vue'
 import AuthPage from '@/pages/auth/auth-page.vue'
-import RegisterPage from '@/pages/auth/register.vue'
 import WorkoutProgress from '@/pages/workout-progress.vue'
 
 const routes = [

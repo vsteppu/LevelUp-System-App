@@ -1,12 +1,13 @@
 <template>
     <div 
+        v-if="authenticated"
         :class="[
             isMobile ? 'px-8' : 'px-20',
             'w-full  py-3 flex justify-between'
         ]"
     >
         <Logo
-            class="size-7 invert"
+            class="size-7"
         />
         <div
             v-if="!isMobile"
@@ -14,21 +15,24 @@
         >
             <router-link 
                 :to="{ name: 'home' }"
+                class="hover:text-violet-300"
             >
                 Home
             </router-link>
             <router-link 
                 :to="{ name: 'progress' }"
+                class="hover:text-violet-300"
             >
                 Progress
             </router-link>
             <button
                 @click="logout"
+                class="hover:text-violet-300"
             >
                 <ArrowRightStartOnRectangleIcon class="size-6 cursor-pointer"/>
             </button>
         </div>
-        <div v-else>
+        <div v-else-if="isMobile">
             <FadeEffect>
                 <XMarkIcon
                     v-if="show"

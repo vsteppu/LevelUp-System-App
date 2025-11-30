@@ -2,7 +2,7 @@
     <TopDropEffect>
         <div
             v-if="showNotification"
-            class="absolute font-extralight text-center w-full h-20 z-50"
+            class="absolute top-0 font-extralight text-center w-full h-20 pointer-events-none"
         >
             <div 
                 v-for="notification in notifications"
