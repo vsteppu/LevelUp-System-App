@@ -32,20 +32,6 @@
                 {{ authPage == 'login' ? "Go to REGISTER" : "Go to LOGIN" }}
             </button>
         </div>
-        <div class="absolute bottom-30">
-            <button
-                @click="addNote"
-                class="p-5 bg-emerald-600"
-            >
-                ADD
-            </button>
-            <button
-                @click="deleteNote"
-                class="p-5 bg-red-600"
-            >
-                DELETE
-            </button>
-        </div>
     </div>
 </template>
 
@@ -74,13 +60,5 @@ const moveToOtherAuthPage = () => {
     } else {
         authPage.value = 'login'
     }
-};
-
-const addNote = () => {
-    notificationStore.notify('message of Adding', 'success')
-};
-
-const deleteNote = () => {
-    notificationStore.notify('message of deletion', 'error')
 };
 </script>

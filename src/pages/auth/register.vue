@@ -64,17 +64,18 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { loginAPI, registerAPI } from "@/api/auth-api";
-import { regularInputs } from "@/assets/inputs";
 import { useRouter } from "vue-router";
+import { registerAPI } from "@/api/auth-api";
+import { regularInputs } from "@/assets/inputs";
 
 import Logo from "@/assets/icons/logo.vue";
 import { useGoogleToken } from "@/stores/recaptcha.js";
 import LoadingIcon from '@/assets/icons/loading.vue'
-import GoogleReCaptcha from '@/library/google-recaptcha.vue'
+import { useNotificationStore } from "@/stores/notification.store";
 
 const router = useRouter();
 const googleToken = useGoogleToken();
+const notificationStore = useNotificationStore();
 
 const name = ref("Vurado");
 const email = ref("vurado@gmail.com");
@@ -100,11 +101,12 @@ const registerHandler = async () => {
         
         if (response.success) {
             router.push({ path: "/" });
+            notificationStore.notify('Register was successful', 'success')
         }
         return response;
     } catch (err) {
-        const error = err;
-        console.error("error: ", error);
+        console.error("error: ", err.message);
+        notificationStore.notify('Register failed', 'error')
         loading.value = false;
     } finally {
         loading.value = false;
