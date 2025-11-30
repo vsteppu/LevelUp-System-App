@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useAuthState } from '@/composables/auth.js'
 
-const api = import.meta.env.VITE_API_URL || '/api'
+const api = 'monarch-backend-production-d902.up.railway.app' || '/api'
+//const api = import.meta.env.VITE_API_URL || '/api'
 const { setUser } = useAuthState()
 
 const registerAPI = async (user) => {
