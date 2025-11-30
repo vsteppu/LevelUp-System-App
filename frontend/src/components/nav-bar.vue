@@ -1,15 +1,15 @@
-
 <template>
     <div 
         :class="[
             isMobile ? 'px-8' : 'px-20',
-            'w-full fixed py-3 flex justify-between'
+            'w-full  py-3 flex justify-between'
         ]"
     >
-        <Logo 
-            class="size-8 invert"
+        <Logo
+            class="size-7 invert"
         />
-        <div 
+        <div
+            v-if="!isMobile"
             class="font-thin text-2xl flex items-center gap-10"
         >
             <router-link 
@@ -28,7 +28,7 @@
                 <ArrowRightStartOnRectangleIcon class="size-6 cursor-pointer"/>
             </button>
         </div>
-        <div>
+        <div v-else>
             <FadeEffect>
                 <XMarkIcon
                     v-if="show"
@@ -48,21 +48,20 @@
 <script setup>
 import { useAuthStore } from "@/stores/auth.store";
 
-import Logo from '@/assets/icons/logo.vue'
 import { ArrowRightStartOnRectangleIcon, Bars2Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 import { storeToRefs } from "pinia";
 import FadeEffect from '@/effects/fade-effect.vue'
 import { useIsMobile } from "@/composables/is-mobile.js";
 import { ref } from "vue";
+import Logo from '@/assets/icons/logo.vue'
 
 const authStore = useAuthStore();
 const { isMobile } = useIsMobile();
 const { authenticated } = storeToRefs(authStore)
-console.log('isMobile: ', isMobile.value);
 const show = ref(false)
 
+
 const logout = async () => {
-    console.log('jhgchgfchgfc');
     authStore.logoutUser()
     authenticated.value = false
 }

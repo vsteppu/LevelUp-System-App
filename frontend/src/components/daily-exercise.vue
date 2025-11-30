@@ -47,6 +47,12 @@
                 Delete
             </button>
         </div>
+        <router-link
+            :to="{name: 'progress'}"
+        >
+            link to home
+        </router-link>
+        <div></div>
     </div>
 </template>
 
@@ -60,6 +66,7 @@ import Divider from './divider.vue'
 
 import Loading from "../assets/icons/loading.vue";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/vue/24/outline";
+import router from "@/router";
 
 const exerciseStore = useExerciseStore();
 const dailyExercise = ref(DAILY_EXERCISE)
@@ -91,8 +98,10 @@ const decreeseCount = ( name ) => {
 };
 
 const submitExercises = async() => {
-    const data = dailyExercise.value
-    await exerciseStore.addDailyExercises(data)
+    console.log('hggdszdfcghvbjnk');
+    router.push({name: 'progress'})
+/*     const data = dailyExercise.value
+    await exerciseStore.addDailyExercises(data) */
 };
 
 const deleteAllExercises = async() => {
