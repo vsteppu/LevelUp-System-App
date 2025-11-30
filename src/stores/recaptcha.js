@@ -10,16 +10,13 @@ export const useGoogleToken = defineStore( "cloudflare-turnstile", () => {
 
     const insertWidget = async () => {
         const grecaptchaContainer = document.getElementById(WIDGET_CONTAINER);
-        console.log('grecaptchaContainer: ', grecaptchaContainer);
 
         widgetId.value = await window.grecaptcha.render(grecaptchaContainer, {
             sitekey: siteKey,
             size: "invisible"
         });
-        console.log('widgetId.value: ', widgetId.value);
 
         reCaptchaToken.value = await window.grecaptcha.execute(widgetId.value);
-        console.log('reCaptchaToken.value: ', reCaptchaToken.value);
     };
 
     const getToken = async() => {
@@ -33,7 +30,7 @@ export const useGoogleToken = defineStore( "cloudflare-turnstile", () => {
 
 
     watch(reCaptchaToken, () => {
-        console.log("🧩 TOKEN");
+        console.log("✅ - Google ReCaptcha token was generated");
     });
 
     return {
