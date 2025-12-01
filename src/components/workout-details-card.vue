@@ -18,8 +18,11 @@
                         :key="item.id"
                         class="flex justify-between text-xl"
                     >
-                        <div class="">{{ item.display_name }}</div>
-                        <div class="">{{ item.value }}</div>
+                        <div>{{ item.display_name }}</div>
+                        <div>
+                            <span>{{ item.value }}</span>
+                            <span class="ml-2">{{ item.unit_type }}</span>
+                        </div>
                     </div>
                 </div>
             </div>

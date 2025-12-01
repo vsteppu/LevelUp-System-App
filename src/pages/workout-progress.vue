@@ -28,15 +28,13 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import { useExerciseStore } from "@/stores/exercise.store.js";
-
+import { useNotificationStore } from "@/stores/notification.store";
 import WorkoutDetailsCard from '@/components/workout-details-card.vue'
-import { DAILY_EXERCISE } from "@/stores/store";
 import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/vue/24/outline";
-import FadeEffect from '../effects/fade-effect.vue'
+import FadeEffect from '@/effects/fade-effect.vue'
 
-
+const notificationStore = useNotificationStore();
 const exerciseStore = useExerciseStore();
-const dailyExercise = ref(DAILY_EXERCISE)
 const loading = ref(false);
 
 const workouts = ref([]);
@@ -60,13 +58,7 @@ const moveForwardHandler = async () => {
     return
 }
 
-
-/* watch( workouts, (value) => {
-    workoutDetails.value = workouts.value
-    console.log('workoutDetails: ', workoutDetails.value);
-}) */
-
-onMounted( async() => {
+onMounted(async() => {
     await handleFetchExercises();
 });
 </script>

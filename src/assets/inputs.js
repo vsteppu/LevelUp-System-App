@@ -1,1 +1,1 @@
-export const regularInputs = 'px-2 border-b focus:shadow-stone-600 shadow-xl duration-900 py-1 w-full rounded appearance-none outline-none'
+export const regularInputs = 'px-2 border-b py-1 w-full appearance-none outline-none'

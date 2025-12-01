@@ -1,11 +1,15 @@
 <template>
         <div class="my-auto flex flex-col gap-2 rounded">
             <div class="flex justify-between items-center">
-                <h1 class="text-2xl font-semibold">Register</h1>
+                <h1 class="text-2xl font-semibold">
+                    Register
+                </h1>
                 <logo class="size-6" />
             </div>
             <div>
-                <h2 class="text-xl font-thin mb-1">Name</h2>
+                <h2 class="text-xl font-thin mb-1">
+                    Name
+                </h2>
                 <input
                     type="text"
                     v-model="name"
@@ -14,7 +18,9 @@
                 />
             </div>
             <div>
-                <h2 class="text-xl font-thin mb-1">Email</h2>
+                <h2 class="text-xl font-thin mb-1">
+                    Email
+                </h2>
                 <input
                     type="text"
                     v-model="email"
@@ -23,7 +29,9 @@
                 />
             </div>
             <div>
-                <h2 class="text-xl font-thin mb-1">Password</h2>
+                <h2 class="text-xl font-thin mb-1">
+                    Password
+                </h2>
                 <div class="flex items-center">
                     <input
                         :type="!showPassword ? 'password' : 'text'"
@@ -44,7 +52,9 @@
                 </div>
             </div>
             <div>
-                <h2 class="text-xl font-thin mb-1">Confirm Password</h2>
+                <h2 class="text-xl font-thin mb-1">
+                    Confirm Password
+                </h2>
                 <div class="flex items-center">
                     <input
                         :type="!showConfirmPassword ? 'password' : 'text'"
@@ -87,7 +97,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { registerAPI } from "@/api/auth-api";
 import { regularInputs } from "@/assets/inputs";

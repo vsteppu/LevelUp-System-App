@@ -6,9 +6,13 @@
             'w-full fixed py-3 flex justify-between'
         ]"
     >
-        <Logo
-            class="size-7"
-        />
+        <router-link 
+            :to="{ name: 'home' }"
+        >
+            <Logo
+                class="size-7"
+            />
+        </router-link>
         <div
             v-if="!isMobile"
             class="font-thin text-2xl flex items-center gap-10"
@@ -50,14 +54,14 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth.store";
 
-import { ArrowRightStartOnRectangleIcon, Bars2Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 import { storeToRefs } from "pinia";
 import FadeEffect from '@/effects/fade-effect.vue'
 import { useIsMobile } from "@/composables/is-mobile.js";
-import { ref } from "vue";
 import Logo from '@/assets/icons/logo.vue'
+import { ArrowRightStartOnRectangleIcon, Bars2Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 
 const authStore = useAuthStore();
 const { isMobile } = useIsMobile();

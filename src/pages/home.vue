@@ -8,7 +8,4 @@
 
 <script setup>
 import DailyExercise from '@/components/daily-exercise.vue'
-import WorkoutDetailsCard from '@/components/workout-details-card.vue'
-
-console.log('home');
 </script>

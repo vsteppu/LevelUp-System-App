@@ -1,9 +1,5 @@
 <template>
-    <div v-if="loading">
-        <Loading />
-    </div>
     <div
-        v-else
         class="text-2xl w-2/5 font-thin flex flex-col justify-center"
     >
         <h1>Daily exercise</h1>
@@ -40,43 +36,22 @@
             >
                 Submit
             </button>
-            <button 
-                @click="deleteAllExercises()"
-                class=" bg-red-800 mt-6 w-fit px-10 py-4 cursor-pointer"
-            >
-                Delete
-            </button>
         </div>
-        <router-link
-            :to="{name: 'progress'}"
-        >
-            link to home
-        </router-link>
-        <div></div>
     </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
-
 import { useExerciseStore } from "@/stores/exercise.store.js";
 import { DAILY_EXERCISE } from "@/stores/store";
-
-import Divider from './divider.vue'
-
-import Loading from "../assets/icons/loading.vue";
+import { useNotificationStore } from "@/stores/notification.store";
+import Divider from '@/components/divider.vue'
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/vue/24/outline";
-import router from "@/router";
 
 const exerciseStore = useExerciseStore();
 const dailyExercise = ref(DAILY_EXERCISE)
 
 const loading = ref(false);
-const history = ref(false);
-
-const handleFetchExercises = async () => {
-    history.value = await exerciseStore.fetchDailyExercises();
-}
 
 const increeseCount = ( name ) => {
     const exerciseIndex = dailyExercise.value.findIndex(item => item.name === name)
@@ -98,19 +73,7 @@ const decreeseCount = ( name ) => {
 };
 
 const submitExercises = async() => {
-    console.log('hggdszdfcghvbjnk');
-    router.push({name: 'progress'})
-/*     const data = dailyExercise.value
-    await exerciseStore.addDailyExercises(data) */
+    const data = dailyExercise.value
+    await exerciseStore.addDailyExercises(data)
 };
-
-const deleteAllExercises = async() => {
-    await exerciseStore.deleteDailyExercise()
-};
-
-console.log('daily');
-
-onMounted(() => {
-    handleFetchExercises();
-});
 </script>

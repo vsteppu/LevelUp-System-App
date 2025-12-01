@@ -1,10 +1,11 @@
+import { ref } from "vue";
 import { defineStore } from "pinia";
-import { computed, ref } from "vue";
-import { DAILY_EXERCISE } from './store'
-import { useAuthState } from "@/composables/auth";
 import { deleteAllExercisesAPI, deleteExerciseAPI, getExercisesAPI, postExercisesAPI } from "@/api/exercises-api";
+import { useAuthState } from "@/composables/auth";
+import { useNotificationStore } from "./notification.store";
 
 export const useExerciseStore = defineStore( "exercise-store", () => {
+    const notificationStore = useNotificationStore()
     const { getUser } = useAuthState()
     const user = getUser()
 
@@ -16,7 +17,8 @@ export const useExerciseStore = defineStore( "exercise-store", () => {
             workoutHistory.value = response?.exercises
             return workoutHistory.value
         } catch (err) {
-            throw err
+            console.error(err)
+            notificationStore.notify("Fetching exercises wasn't successful", "error")
         }
     }
 
