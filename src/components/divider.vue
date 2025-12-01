@@ -1,3 +1,8 @@
 <template>
-<div class="border-b-white border font-thin"/>
+    <div :class="['h-px w-full', color]"/>
 </template>
+<script setup>
+const { 
+    color = 'bg-white'
+} = defineProps(['color']) 
+</script>

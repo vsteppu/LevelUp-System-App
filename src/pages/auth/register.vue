@@ -24,21 +24,45 @@
             </div>
             <div>
                 <h2 class="text-xl font-thin mb-1">Password</h2>
-                <input
-                    type="password"
-                    v-model="password"
-                    placeholder="Your password"
-                    :class="regularInputs"
-                />
+                <div class="flex items-center">
+                    <input
+                        :type="!showPassword ? 'password' : 'text'"
+                        v-model="password"
+                        placeholder="Your password"
+                        :class="regularInputs"
+                    />
+                    <EyeIcon 
+                        v-if="!showPassword"
+                        @click="handleShowPassword"
+                        class="size-6 hover:text-red-600"
+                    />
+                    <EyeSlashIcon
+                        v-else
+                        @click="handleShowPassword"
+                        class="size-6 hover:text-green-600"
+                    />
+                </div>
             </div>
             <div>
                 <h2 class="text-xl font-thin mb-1">Confirm Password</h2>
-                <input
-                    type="password"
-                    v-model="password"
-                    placeholder="Your password"
-                    :class="regularInputs"
-                />
+                <div class="flex items-center">
+                    <input
+                        :type="!showConfirmPassword ? 'password' : 'text'"
+                        v-model="confirmPassword"
+                        placeholder="Your password"
+                        :class="[regularInputs, 'mr-3']"
+                    />
+                    <EyeIcon 
+                        v-if="!showConfirmPassword"
+                        @click="handleShowConfirmPassword"
+                        class="size-6 hover:text-red-600"
+                    />
+                    <EyeSlashIcon
+                        v-else
+                        @click="handleShowConfirmPassword"
+                        class="size-6 hover:text-green-600"
+                    />
+                </div>
             </div>
             <button
                 @click="registerHandler()"
@@ -72,16 +96,27 @@ import Logo from "@/assets/icons/logo.vue";
 import { useGoogleToken } from "@/stores/recaptcha.js";
 import LoadingIcon from '@/assets/icons/loading.vue'
 import { useNotificationStore } from "@/stores/notification.store";
+import { EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/outline';
 
 const router = useRouter();
 const googleToken = useGoogleToken();
 const notificationStore = useNotificationStore();
 
-const name = ref("Vurado");
-const email = ref("vurado@gmail.com");
+const name = ref("Vlad");
+const email = ref("vlad@gmail.com");
 const password = ref("123456Aa.");
 const confirmPassword = ref("123456Aa.");
 const loading = ref(false);
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
+
+const handleShowPassword = () => {
+    showPassword.value = !showPassword.value
+}
+
+const handleShowConfirmPassword = () => {
+    showConfirmPassword.value = !showConfirmPassword.value
+}
 
 const registerHandler = async () => {
     loading.value = true;

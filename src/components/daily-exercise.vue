@@ -4,7 +4,7 @@
     </div>
     <div
         v-else
-        class="text-3xl w-full font-thin flex flex-col justify-center"
+        class="text-2xl w-2/5 font-thin flex flex-col justify-center"
     >
         <h1>Daily exercise</h1>
         <div

@@ -3,7 +3,7 @@
         v-if="authenticated"
         :class="[
             isMobile ? 'px-8' : 'px-20',
-            'w-full  py-3 flex justify-between'
+            'w-full fixed py-3 flex justify-between'
         ]"
     >
         <Logo
